@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Campus Playbook · Heartland Dental</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --navy:#041e41;--gold:#caa977;--blue:#004370;
+  --bg:#f3f5f8;--panel:#ffffff;--ink:#0d2140;--muted:#5a6272;--line:#dfe3ea;--soft:#eef1f6;
+  --hires:#004370;--target:#caa977;--ok:#2d6e3d;--warn:#ca4512;--bad:#a1263a;--focus:#0065ae;
+  --btn-bg:#041e41;--btn-ink:#ffffff;--okbg:#e4f1e7;--warnbg:#fbe9e0;--badbg:#f8e3e6;--infobg:#e3edf6;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0a1220;--panel:#111b2e;--ink:#e7ecf4;--muted:#9ba7bb;--line:#22304a;--soft:#18243b;
+    --hires:#5d93c1;--ok:#5fc275;--warn:#ff9a62;--bad:#ff7d8f;--focus:#7db6ee;
+    --btn-bg:#caa977;--btn-ink:#041e41;--okbg:#17301f;--warnbg:#3a2418;--badbg:#3a1b22;--infobg:#17283d}
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:700;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.num,td.r,th.r{font-variant-numeric:tabular-nums}
+#app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+#nav{background:var(--navy);color:#fff;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:18px 12px;gap:6px}
+.brand{display:flex;flex-direction:column;gap:10px;padding:2px 8px 16px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:8px}
+.brand img{width:132px;height:auto;display:block}
+.brand b{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:17px;letter-spacing:0}
+.brand span{display:block;font-size:12px;color:#b9c4d6;margin-top:1px}
+#nav nav{display:flex;flex-direction:column;gap:2px}
+.nv{display:flex;align-items:center;gap:10px;background:none;border:0;color:#d5deec;text-align:left;padding:9px 10px;border-radius:6px;cursor:pointer;width:100%}
+.nv svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nv:hover{background:rgba(255,255,255,.08)}
+.nv.on{background:var(--gold);color:var(--navy);font-weight:600}
+.nv .cnt{margin-left:auto;font-size:11px;background:rgba(255,255,255,.16);border-radius:10px;padding:0 7px}
+.nv.on .cnt{background:rgba(4,30,65,.16)}
+.savestate{margin-top:auto;font-size:11.5px;color:#aeb9cc;padding:8px 10px;line-height:1.35}
+main{padding:28px 36px 60px;max-width:1280px;width:100%}
+.head{display:flex;gap:16px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px}
+.head h1{font-size:30px;line-height:1.1}
+.head p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.head .acts{display:flex;gap:8px;flex-wrap:wrap}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.filters select,.filters input[type=search],.filters input[type=text]{min-width:150px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.panel.pad{padding:18px 20px}
+.panel h2{font-size:17px}
+.sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+.muted{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px}
+.grid2.even{grid-template-columns:1fr 1fr}
+input,select,textarea{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px;min-height:34px}
+textarea{width:100%;resize:vertical;min-height:70px}
+select{padding-right:6px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:7px 13px;cursor:pointer;font-weight:600;min-height:34px}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg)}
+.btn.primary:hover{filter:brightness(1.12)}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:3px 9px;min-height:26px;font-size:12.5px}
+.link{background:none;border:0;padding:0;color:var(--blue);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+@media (prefers-color-scheme:dark){.link{color:var(--focus)}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:2px;gap:2px}
+.seg button,.seg label{border:0;background:none;padding:5px 12px;border-radius:5px;cursor:pointer;font-weight:600;color:var(--muted);font-size:13px}
+.seg .on{background:var(--btn-bg);color:var(--btn-ink)}
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:16px;overflow:hidden}
+.hero>div{padding:22px 26px}
+.hero>div+div{border-left:1px solid var(--line)}
+.hero .lbl{color:var(--muted);font-weight:600}
+.hero .big{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:50px;font-weight:700;line-height:1.05;margin:4px 0 12px}
+.hero .big small{font-size:20px;color:var(--muted);font-weight:400;font-family:"Segoe UI",system-ui,sans-serif}
+.bar{height:10px;border-radius:6px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--hires);border-radius:6px;min-width:0}
+.bar.gold i{background:var(--gold)}
+.bar.over i{background:var(--warn)}
+.hero .meta{display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);font-size:13px}
+.ledger{display:grid;grid-template-columns:repeat(6,1fr);margin-bottom:16px}
+.ledger>div{padding:14px 18px}
+.ledger>div+div{border-left:1px solid var(--line)}
+.ledger .v{font-size:23px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.ledger .k{color:var(--muted);font-size:12.5px}
+.banner{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 18px;margin-bottom:16px;background:var(--infobg);border:1px solid var(--line);border-radius:10px}
+.banner b{display:block}
+.banner span{color:var(--muted);font-size:12.5px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:11px;padding:1px 9px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.chip.ok{background:var(--okbg);color:var(--ok)}.chip.warn{background:var(--warnbg);color:var(--warn)}.chip.bad{background:var(--badbg);color:var(--bad)}.chip.info{background:var(--infobg);color:var(--blue)}
+@media (prefers-color-scheme:dark){.chip.info{color:var(--focus)}}
+.tag{font-size:10.5px;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:6px;letter-spacing:.02em}
+.tag.DOC{background:var(--infobg);color:var(--blue)}.tag.HYG{background:var(--warnbg);color:var(--warn)}
+@media (prefers-color-scheme:dark){.tag.DOC{color:var(--focus)}}
+/* tables */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--panel);position:sticky;top:0}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+th.r,td.r{text-align:right}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--soft)}
+tfoot td{font-weight:700;background:var(--soft)}
+.empty{padding:34px 16px;text-align:center;color:var(--muted)}
+.st{border:0;border-radius:11px;font-weight:600;font-size:12px;padding:2px 6px;min-height:0;cursor:pointer}
+.st-Planned{background:var(--soft)}.st-Confirmed{background:var(--infobg);color:var(--blue)}.st-Held{background:var(--okbg);color:var(--ok)}.st-Invoiced{background:var(--okbg);color:var(--ok)}.st-Cancelled{background:var(--badbg);color:var(--bad)}
+.pill{display:inline-block;border-left:3px solid var(--c,#999);background:var(--soft);padding:1px 7px;border-radius:3px;font-size:12px;white-space:nowrap}
+.sec{font-size:13px;font-weight:700;color:var(--muted);margin:22px 0 8px;display:flex;gap:8px;align-items:center}
+/* kpi row for events */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);margin-bottom:16px}
+.kpis>div{padding:12px 18px}.kpis>div+div{border-left:1px solid var(--line)}
+.kpis .v{font-size:22px;font-weight:700}.kpis .k{font-size:12.5px;color:var(--muted)}
+/* lists */
+.rows{list-style:none;margin:0;padding:0}
+.rows li{display:flex;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.rows li:last-child{border-bottom:0}
+.rows li:hover{background:var(--soft)}
+.dt{width:44px;text-align:center;flex:none;line-height:1.1}
+.dt b{display:block;font-size:19px}.dt span{font-size:11.5px;color:var(--muted)}
+.rows .grow{flex:1;min-width:0}
+.rows .grow b,.rows .grow span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* donut */
+.donut{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.donut svg{width:150px;height:150px;transform:rotate(-90deg);flex:none}
+.donut svg text{transform:rotate(90deg);transform-origin:21px 21px;fill:var(--ink);font-weight:700}
+.legend{list-style:none;margin:0;padding:0;flex:1;min-width:140px}
+.legend li{display:flex;align-items:center;gap:8px;padding:3px 0;cursor:pointer}
+.legend li:hover{text-decoration:underline}
+.legend i{width:10px;height:10px;border-radius:2px;background:var(--c)}
+.legend em{margin-left:auto;font-style:normal;font-weight:600}
+/* calendar */
+.calbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;margin-bottom:12px}
+.calbar h2{min-width:170px;text-align:center}
+.legend-row{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-left:auto;max-width:640px}
+.legend-row span{display:inline-flex;gap:5px;align-items:center}.legend-row i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);overflow:hidden}
+.cal .dow{padding:8px;font-size:12px;font-weight:600;color:var(--muted);text-align:center;border-bottom:1px solid var(--line);background:var(--soft)}
+.cal .day{min-height:104px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:5px;cursor:default;position:relative}
+.cal .day:nth-child(7n){border-right:0}
+.cal .day.out{background:var(--soft);color:var(--muted)}
+.cal .day .n{font-size:12px;font-weight:600;display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px}
+.cal .day.today .n{background:var(--btn-bg);color:var(--btn-ink)}
+.cal .ev{display:block;width:100%;text-align:left;background:var(--soft);border:0;border-left:3px solid var(--c);border-radius:3px;padding:2px 5px;margin-top:3px;font-size:11.5px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal .ev:hover{filter:brightness(.95)}
+.cal .ev.x{text-decoration:line-through;opacity:.6}
+.cal .more{font-size:11px;color:var(--muted);margin-top:2px}
+.cal .addday{position:absolute;right:4px;top:4px;opacity:0;border:0;background:none;cursor:pointer;color:var(--muted);font-size:16px;line-height:1}
+.cal .day:hover .addday,.cal .addday:focus-visible{opacity:1}
+.obs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;border-top:3px solid var(--bar,var(--gold))}
+.card.hyg{--bar:var(--hires)}
+.card h3{font-size:15px;line-height:1.25;font-family:"Segoe UI",system-ui,sans-serif}
+.card .loc{color:var(--muted);font-size:12.5px}
+.card .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:left;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0}
+.card .stats b{display:block;font-size:15px}.card .stats span{font-size:11.5px;color:var(--muted)}
+.contact{border:1px solid var(--line);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:3px;background:var(--panel)}
+.contact .top{display:flex;justify-content:space-between;gap:8px}
+.contact a{color:var(--blue);word-break:break-all}
+@media (prefers-color-scheme:dark){.contact a{color:var(--focus)}}
+.cn{width:100%;font-size:13px}
+/* forms/modal */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.form .full{grid-column:1/-1}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600}
+.fld span{color:var(--muted)}
+.fld input,.fld select,.fld textarea{font-weight:400;width:100%}
+.formfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line);grid-column:1/-1;flex-wrap:wrap}
+.scrim{position:fixed;inset:0;background:rgba(4,30,65,.55);display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;overflow:auto;z-index:50}
+.modal{background:var(--panel);border-radius:12px;width:min(580px,100%);padding:22px 24px;border:1px solid var(--line)}
+.modal.wide{width:min(860px,100%)}
+.modal h2{font-size:21px;margin-bottom:4px}
+.modal .x{float:right}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--btn-bg);color:var(--btn-ink);padding:10px 18px;border-radius:8px;font-weight:600;z-index:80;display:none}
+.ro{width:100%;min-height:200px;font:12px/1.4 ui-monospace,Consolas,monospace}
+.res a{color:var(--blue);font-weight:600}
+@media (prefers-color-scheme:dark){.res a{color:var(--focus)}}
+@media (max-width:980px){
+  #app{grid-template-columns:1fr}
+  #nav{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:10px}
+  .brand{border:0;margin:0;padding:0 10px 0 0;flex-direction:row;align-items:center}.brand img{width:90px}.brand span{display:none}
+  #nav nav{flex-direction:row;flex-wrap:wrap}.nv{width:auto;padding:6px 9px}.savestate{display:none}
+  main{padding:18px 14px 50px}
+  .grid2,.grid2.even,.hero{grid-template-columns:1fr}.hero>div+div{border-left:0;border-top:1px solid var(--line)}
+  .ledger,.kpis{grid-template-columns:repeat(2,1fr)}.ledger>div,.kpis>div{border-top:1px solid var(--line)}
+  .form{grid-template-columns:1fr}.cal .day{min-height:70px}.legend-row{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div id="app"><aside id="nav"></aside><main id="main"></main></div>
+<div id="modal-root"></div>
+<div id="toast" role="status"></div>
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'$'+Math.round(+n||0).toLocaleString('en-US');
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
+const pad=n=>String(n).padStart(2,'0');
+const fmtISO=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parseISO=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const today=()=>fmtISO(new Date());
+const addDays=(iso,n)=>{const d=parseISO(iso);d.setDate(d.getDate()+n);return fmtISO(d)};
+const fmtDate=s=>s?parseISO(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+const byDate=(a,b)=>a.date<b.date?-1:a.date>b.date?1:0;
+const pctOf=(a,b)=>b>0?Math.round(a/b*100):0;
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CY=2027; // recruiting cycle year shown in the app
+const LOGO='data:image/png;base64,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';
+
+const STATES={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',PR:'Puerto Rico'};
+const NAME2CODE=Object.fromEntries(Object.entries(STATES).map(([c,n])=>[n.toLowerCase(),c]));
+const stateOf=(kind,s)=>{if(kind==='dental'){const m=/,\s*([A-Z]{2})\s*$/.exec(s.loc||'');return m?m[1]:(NAME2CODE[(s.state||s.loc||'').toLowerCase()]||'')}return NAME2CODE[(s.state||'').toLowerCase()]||''};
+
+const TYPES={'Lunch and Learn':'#ffae35','Social':'#c53e91','Vendor Fair':'#2d6e3d','Focus Group':'#129d78','Invite Only Dinner':'#952686','Dinner and Learn':'#ec518c','Conference':'#004d83','Doctor Panel':'#5f2038','Webinar':'#5d93c1','Interview Day':'#ca4512','Class Visit':'#8dc640','Open House - Supported Office Visit':'#48aa8f','Open Dinner':'#f36c33','Office Hours':'#78777a','Faculty':'#894c63','Virtual Recruiter Appointment':'#005b7f','Student Leadership Dinners':'#caa977'};
+const FORMATS=['In-person','Virtual'];
+const STATUSES=['Planned','Confirmed','Held','Invoiced','Cancelled'];
+const SUPPORT=['Strategic','Advancing'];
+const OBSERVANCES={1:[],2:['National Children\u2019s Dental Health Month'],3:['World Oral Health Day (Mar 20)'],4:['Oral Cancer Awareness Month'],10:['Dental Hygiene Appreciation Month']};
+
+/* ---------- seed data (read from your screenshots) ---------- */
+const DENTAL_SEED=`A.T. Still University Arizona School of Dentistry & Oral Health|Mesa, AZ|tommy|6|15000
+Boston University Henry M. Goldman School of Dental Medicine|Boston, MA|jabari|6|17000
+California Northstate University College of Dental Medicine|Elk Grove, CA|tommy|3|12000
+Case Western Reserve University School of Dental Medicine|Cleveland, OH|amadi|3|15000
+Columbia University College of Dental Medicine|New York, NY|jess|5|17000
+Creighton University School of Dentistry|Omaha, NE|amadi|2|12000
+East Carolina University School of Dental Medicine|Greenville, NC|sam|1|12000
+Harvard University School of Dental Medicine|Boston, MA|jabari|1|8000
+Herman Ostrow School of Dentistry of the University of Southern California|Los Angeles, CA|tommy|2|15000
+High Point University Workman School of Dental Medicine|High Point, NC|sam|2|8000
+Howard University College of Dentistry|Washington, DC|ashley|3|17000
+Indiana University School of Dentistry|Indianapolis, IN|ashley|7|21500
+Kansas City University College of Dental Medicine, Joplin|Joplin, MO|amadi|1|12000
+Lake Erie College of Osteopathic Medicine (LECOM)|Bradenton, FL|sam|12|21500
+Lincoln Memorial University College of Dental Medicine|Knoxville, TN|ashley|2|12000
+Loma Linda University School of Dentistry|Loma Linda, CA|tommy|3|15000
+Louisiana State University School of Dentistry|New Orleans, LA|jess|2|12000
+Lyon College School of Dental Medicine|Little Rock, AR|amadi|0|8000
+Marquette University School of Dentistry|Milwaukee, WI|ashley|5|17000
+Medical University of South Carolina James B. Edwards College of Dental Medicine|Charleston, SC|sam|4|15000
+Meharry Medical College School of Dentistry|Nashville, TN|ashley|5|17000
+Midwestern University College of Dental Medicine-Arizona|Glendale, AZ|tommy|8|19000
+Midwestern University College of Dental Medicine-Illinois|Downers Grove, IL|ashley|4|15000
+Missouri School of Dentistry and Oral Health at A.T. Still University|St. Louis, MO|ashley|3|15000
+New York University College of Dentistry|New York, NY|jess|5|17000
+Northeast Ohio Medical University Bitonte College of Dentistry|Rootstown, OH|amadi|0|5000
+Nova Southeastern University College of Dental Medicine|Davie, FL|sam|12|21500
+Oregon Health & Science University School of Dentistry|Portland, OR|tommy|1|12000
+Pacific Northwest University of Health Sciences School of Dental Medicine|Yakima, WA|tommy|0|5000
+Ponce Health Sciences University School of Dental Medicine|Ponce, PR|jess|0|8000
+Roseman University of Health Sciences College of Dental Medicine|South Jordan, UT|amadi|3|12000
+Rutgers School of Dental Medicine|Newark, NJ|sam|2|15000
+Southern Illinois University School of Dental Medicine|Alton, IL|ashley|7|19000
+Stony Brook University School of Dental Medicine|Stony Brook, NY|jess|1|12000
+Temple University The Maurice H. Kornberg School of Dentistry|Philadelphia, PA|jabari|4|17000
+Texas A&M University College of Dentistry|Dallas, TX|jabari|7|19000
+Texas Tech University Health Sciences Center El Paso Woody L. Hunt School of Dental Medicine|El Paso, TX|jabari|2|12000`;
+const HYG_SEED=`Calhoun Community College|Alabama|erica|11|1|Advancing
+Fortis Institute, Birmingham|Alabama|erica|16|2|Strategic
+Wallace State Community College|Alabama|erica|26|1|Advancing
+Carrington College, Mesa|Arizona|haley|58|3|Strategic
+Mesa Community College|Arizona|haley|11|1|Strategic
+Mohave College|Arizona|haley|13|1|Strategic
+Northern Arizona University, School of Health Professions|Arizona|haley|||Advancing
+Phoenix College|Arizona|haley|21|2|Strategic
+Pima Community College-Tucson|Arizona|haley|29|3|Strategic
+Rio Salado College|Arizona|haley|15|1|Strategic
+University of Arkansas, College of Health Professions|Arkansas|erica|||Strategic
+University of Arkansas, Fort Smith|Arkansas|erica|||Strategic
+Colorado Mountain College|Colorado|haley|0|1|Advancing
+Colorado Northwestern Community College|Colorado|haley|23|1|Strategic
+Community College of Denver|Colorado|haley|24|1|Strategic
+Concorde Career College, Aurora|Colorado|haley|31|5|Strategic
+Front Range Community College|Colorado|haley||0|Advancing
+Pikes Peak State College|Colorado|haley||0|Strategic
+Pueblo Community College|Colorado|haley|20|1|Strategic
+Goodwin University East Hartford|Connecticut|karen|18|1|Advancing
+Tunxis Community College|Connecticut|karen|||Advancing
+University of Bridgeport, Fones School of Dental Hygiene|Connecticut|karen|38|1|Strategic
+University of New Haven|Connecticut|karen|34|1|Strategic
+Broward College|Florida|destinee|20|1|Strategic
+College of Central Florida|Florida|destinee|0|2|Strategic
+Concorde Career College, Fort Myers|Florida|destinee||0|Advancing
+Concorde Career Institute, Jacksonville|Florida|destinee|0|3|Strategic
+Concorde Career Institute, Miramar|Florida|destinee|0|2|Strategic
+Concorde Career Institute, Orlando|Florida|destinee|64|11|Strategic
+Concorde Career Institute, Tampa|Florida|destinee|48|11|Strategic
+Daytona State College|Florida|destinee|16|3|Strategic
+Eastern Florida State College|Florida|destinee|11|1|Strategic
+Florida SouthWestern State College|Florida|destinee|13|7|Strategic
+Florida State College at Jacksonville|Florida|destinee|23|5|Strategic
+Gulf Coast State College|Florida|destinee|14|3|Strategic
+Hillsborough Community College|Florida|destinee|||Strategic`;
+const REC_SEED=[['jess','Jess Bordon','DOC',169000,35],['jabari','Jabari Scott','DOC',195000,50],['sam','Sam Kruger','DOC',208500,64],['amadi','Amadi Forbes','DOC',161000,27],['ashley','Ashley Morgan','DOC',221000,60],['tommy','Tommy Back','DOC',181000,38],['destinee','Destinee Allen','HYG',0,39],['erica','Erica Jackson','HYG',0,26],['haley','Haley Hoelscher','HYG',0,31],['megan','Megan Erickson','HYG',0,34],['karen','Karen Hernandez','HYG',0,26],['kellie','Kellie Murphy','HYG',0,28],['terrence','Terrence Marshall','HYG',0,28]];
+/* Roster workbook: [school, 0=dental 1=hygiene, recruiter id, contact, state, 2026 budget, 2026 grads] */
+const ROSTER=[["Lake Erie College of Osteopathic Medicine (LECOM) (3 campuses)",0,"sam","Thomas Yoon","Florida",21500,102],["Nova Southeastern University College of Dental Medicine",0,"sam","Andres Pinto","Florida",21500,152],["University of Florida College of Dentistry",0,"sam","Isabel Garcia","Florida",21500,92],["University of Alabama at Birmingham School of Dentistry",0,"jabari","Nicolaas Geurs","Alabama",15000,105],["Lyon College School of Dental Medicine",0,"amadi","Burke Soffe","Arkansas",5000,80],["A.T. Still University Arizona School of Dentistry & Oral Health",0,"tommy","Desmond Gallagher","Arizona",15000,75],["Midwestern University College of Dental Medicine (Arizona)",0,"tommy","Sheri Brownstein","Arizona",19000,142],["California Northstate University College of Dental Medicine",0,"tommy","Dr. Rosemary Wu","California",12000,35],["Loma Linda University School of Dentistry",0,"tommy","Robert Handysides","California",15000,124],["University of the Pacific Arthur A. Dugoni School of Dentistry",0,"tommy","Elisa Chavez","California",12000,171],["University of California at Los Angeles School of Dentistry",0,"tommy","Paul Kresbsbach","California",15000,113],["University of California at San Francisco School of Dentistry",0,"tommy","Michael Reddy","California",12000,75],["Herman Ostrow School of Dentistry of the University of Southern California",0,"tommy","Yang Chai","California",15000,174],["Western University of Health Sciences College of Dental Medicine",0,"tommy","Elizabeth Andrews","California",12000,73],["University of Colorado Anschutz School of Dental Medicine",0,"tommy","Denise Kassebaum","Colorado",19000,118],["University of Connecticut School of Dental Medicine",0,"jabari","Steven Lepowsky","Connecticut",12000,52],["Howard University College of Dentistry",0,"ashley","Andrea Jackson","District Of Columbia",17000,75],["The Dental College of Georgia at Augusta University",0,"jabari","Theresa Gonzales","Georgia",19000,87],["University of Iowa College of Dentistry",0,"amadi","Clark Stanford","Iowa",12000,88],["Midwestern University College of Dental Medicine (Illinois)",0,"ashley","Hal Haering","Illinois",15000,140],["University of Illinois Chicago College of Dentistry",0,"ashley","Susan Rowan","Illinois",15000,116],["Southern Illinois University School of Dental Medicine",0,"ashley","Saulius Drukteinis","Illinois",19000,55],["Indiana University School of Dentistry",0,"ashley","Carol Murdoch-Kinch","Indiana",21500,112],["University of Kentucky College of Dentistry",0,"jess","Jeffrey Okeson","Kentucky",19000,65],["University of Louisville School of Dentistry",0,"jess","Margaret Hill","Kentucky",19000,117],["University of Pikeville Tanner College of Dental Medicine",0,"jess","Jill Keaton","Kentucky",5000,54],["Louisiana State University School of Dentistry",0,"jess","John Gallo","Louisiana",12000,78],["Boston University Henry M. Goldman School of Dental Medicine",0,"jabari","Cataldo Leone","Massachusetts",19000,209],["Harvard University School of Dental Medicine",0,"jabari","William Giannobile","Massachusetts",12000,37],["Tufts University School of Dental Medicine",0,"jabari","Nadeem Karimbux","Massachusetts",19000,240],["University of New England College of Dental Medicine",0,"jabari","Nicole Kimmes","Maine",12000,65],["University of Maryland School of Dentistry",0,"sam","Mark Reynolds","Maryland",15000,128],["University of Detroit Mercy School of Dentistry",0,"ashley","Mert Asku","Michigan",21500,155],["University of Michigan School of Dentistry",0,"ashley","Jacques Eduardo Nor","Michigan",17000,129],["University of Minnesota School of Dentistry",0,"ashley","Kristin Artinger","Minnesota",19000,119],["Kansas City University College of Dental Medicine, Joplin",0,"amadi","Linda Niessen","Missouri",12000,80],["Missouri School of Dentistry and Oral Health at A.T. Still University",0,"ashley","Kneka Smith","Missouri",15000,70],["University of Missouri, Kansas City School of Dentistry",0,"amadi","Paul Luepke","Missouri",19000,104],["University of Mississippi School of Dentistry",0,"jess","Pai Chatterjee Kirk","Mississippi",12000,39],["East Carolina University School of Dental Medicine",0,"sam","Gregory Chadwick","North Carolina",12000,51],["High Point University Workman School of Dental Medicine",0,"sam","Ali Shazib","North Carolina",8000,60],["University of North Carolina at Chapel Hill Adams School of Dentistry",0,"sam","Janet Guthmiller","North Carolina",15000,82],["Creighton University School of Dentistry",0,"amadi","Jillian Wallen","Nebraska",15000,110],["University of Nebraska Medical Center College of Dentistry",0,"amadi","Gerry Kugel","Nebraska",12000,58],["Touro College of Dental Medicine (New Mexico)",0,"jess","Joseph Parkinson","New Mexico",5000,114],["Rutgers School of Dental Medicine",0,"sam","Cecile Feldman","New Jersey",15000,128],["University of Nevada Las Vegas School of Dental Medicine",0,"amadi","Dr. Shawn Gerstenberger","Nevada",12000,80],["University at Buffalo School of Dental Medicine",0,"sam","Marcelo Araujo","New York",15000,119],["Columbia University College of Dental Medicine",0,"jess","Dennis Mitchell","New York",17000,96],["New York University College of Dentistry",0,"jess","Charles Bertolami","New York",17000,397],["Stony Brook University School of Dental Medicine",0,"jess","Patrick Lloyd","New York",12000,47],["Touro College of Dental Medicine (New York)",0,"jess","Ronnie Myers","New York",15000,114],["Yeshiva University College of Dental Medicine",0,"jess","Dr. Edward Farkas","New York",5000,150],["Case Western Reserve University School of Dental Medicine",0,"amadi","Dale Baur","Ohio",15000,78],["The Ohio State University College of Dentistry",0,"amadi","Carroll Ann Trotman","Ohio",15000,121],["Northeast Ohio Medical University Bitonte College of Dentistry",0,"amadi","Dr. Sorin Teich","Ohio",5000,50],["University of Oklahoma College of Dentistry (2 campuses)",0,"amadi","Paul Mullasseril","Oklahoma",15000,67],["Oregon Health & Science University School of Dentistry",0,"tommy","Ronald Sakaguchi","Oregon",12000,72],["University of Pennsylvania School of Dental Medicine",0,"jabari","Mark Wolff","Pennsylvania",17000,198],["University of Pittsburgh School of Dental Medicine",0,"sam","Marnie Oakley","Pennsylvania",17000,85],["Temple University The Maurice H. Kornberg School of Dentistry (Satellite in Tamaqua, PA 20 students)",0,"jabari","Amid Ismail","Pennsylvania",17000,152],["Universidad Ana G. Mendez, Gurabo, School of Dental Medicine",0,"jess","Beverly Escalona","Puerto Rico",8000,40],["Ponce Health Sciences University School of Dental Medicine",0,"jess","Noel Aymat","Puerto Rico",8000,50],["University of Puerto Rico School of Dental Medicine",0,"jess","Dr. Lidia Guerrero","Puerto Rico",12000,60],["Medical University of South Carolina James B. Edwards College of Dental Medicine",0,"sam","Sarandeep Huja","South Carolina",15000,79],["Lincoln Memorial University College of Dental Medicine",0,"ashley","Qi Wang","Tennessee",12000,80],["Meharry Medical College School of Dentistry",0,"ashley","Cherae Farmer-Dixon","Tennessee",17000,61],["University of Tennessee Health Sciences Center College of Dentistry",0,"ashley","Ken Tilashalski","Tennessee",15000,105],["Texas A&M University College of Dentistry (Baylor)",0,"jabari","Lily Garcia","Texas",19000,102],["Texas Tech University Health Sciences Center El Paso Woody L. Hunt School of Dental Medicine",0,"jabari","Richard Black","Texas",12000,40],["The University of Texas School of Dentistry at Houston",0,"jabari","John Valenza","Texas",15000,102],["The University of Texas at San Antonio School of Dentistry",0,"jabari","Kenneth Hargreaves","Texas",19000,107],["Roseman University of Health Sciences College of Dental Medicine (Satellite campus-Nevada)",0,"amadi","Frank Licari","Utah",12000,99],["University of Utah School of Dentistry",0,"amadi","Rory Hume","Utah",12000,49],["Virginia Commonwealth University School of Dentistry",0,"sam","Jeffrey Johnson","Virginia",17000,103],["University of Washington School of Dentistry",0,"tommy","Andre Ritter","Washington",15000,72],["Pacific Northwest University of Health Sciences School of Dental Medicine",0,"tommy","Foti Panagakos","Washington",5000,36],["Marquette University School of Dentistry",0,"ashley","Elsbeth Kalenderian","Wisconsin",17000,94],["West Virginia University School of Dentistry",0,"sam","Stephen Pachuta","West Virginia",15000,49],["Calhoun Community College",1,"erica","Sunnie McWhorter","Alabama",0,11],["Fortis Institute, Birmingham",1,"erica","Angela King Jones","Alabama",0,16],["Wallace State Community College",1,"erica","Ms. Susan Brewer","Alabama",0,26],["Carrington College, Mesa",1,"haley","Brenda J Chavez","Arizona",0,58],["Mesa Community College",1,"haley","Kimberlee Zitek","Arizona",0,11],["Mohave College",1,"haley","Tracy Gift","Arizona",0,13],["Northern Arizona University",1,"haley","Cadleo \"Chad\" Webb","Arizona",0,30],["Phoenix College",1,"haley","Rosa Querry","Arizona",0,21],["Pima Community College, Tucson",1,"haley","Holly Houck","Arizona",0,29],["Rio Salado College",1,"haley","Dr. Monica Williamson Nenad","Arizona",0,15],["University of Arkansas, Fort Smith, Health Sciences",1,"erica","Dr. Virginia Hardgraves","Arkansas",0,13],["University of Arkansas for Medical Sciences",1,"erica","Bridget Fitzhugh","Arkansas",0,35],["Colorado Mountain College",1,"haley","Ms. Laura L. Jacob","Colorado",0,0],["Colorado Northwestern Community College",1,"haley","LaKell Archer","Colorado",0,23],["Community College of Denver",1,"haley","Ms. Rebecca McGruder","Colorado",0,24],["Concorde Career College, Aurora",1,"haley","Jennifer Stauch","Colorado",0,31],["Front Range Community College",1,"haley","Martha McComas","Colorado",0,null],["Pikes Peak State College",1,"haley","Ewa Posorski","Colorado",0,30],["Pueblo Community College",1,"haley","Ms. Linda Blasi","Colorado",0,20],["University of Bridgeport, Fones School of Dental Hygiene",1,"karen","Adriana Fields","Connecticut",0,38],["University of New Haven",1,"karen","Marie R. Paulis","Connecticut",0,34],["Goodwin University East Hartford",1,"karen","Christine Walsh","Connecticut",0,18],["Connecticut State Community College, Tunxis",1,"karen","Dr. Patricia Johnson Lane","Connecticut",0,22],["Broward College",1,"destinee","Ms. Elizabeth Hobdy","Florida",0,20],["College of Central Florida",1,"destinee","Ms. Jerelyn Jane Zacke","Florida",0,0],["Concorde Career College, Fort Myers",1,"destinee","Stacey Ehlers","Florida",0,null],["Concorde Career Institute, Jacksonville",1,"destinee","Sandi Robinson","Florida",0,0],["Concorde Career Institute, Miramar",1,"destinee","Dr. Adela Mills-Lopez","Florida",0,0],["Concorde Career Institute, Orlando",1,"destinee","Ms. Eleta Reed-Morgan","Florida",0,64],["Concorde Career Institute, Tampa",1,"destinee","Ms. Charmaine Idlett","Florida",0,48],["Daytona State College",1,"destinee","Ms. Jennifer McCann","Florida",0,16],["Eastern Florida State College",1,"destinee","Jessica Milford, CRDH","Florida",0,11],["Florida SouthWestern State College",1,"destinee","Ms. Karen J Molumby","Florida",0,13],["Florida State College at Jacksonville",1,"destinee","Dr. Jeff Smith","Florida",0,23],["Gulf Coast State College",1,"destinee","Ms. Miranda Stewart","Florida",0,14],["Hillsborough College",1,"destinee","Ms. Melissa Alair Miller","Florida",0,12],["Indian River State College",1,"destinee","Ms. Mary S. Pelletier","Florida",0,9],["Miami Dade College",1,"destinee","Dr. Enrique R. Mendez","Florida",0,44],["Palm Beach State College",1,"destinee","Ms. Judith McCauley","Florida",0,25],["Pasco Hernando State College",1,"destinee","Dr. Musarrat Anjum Shah","Florida",0,12],["Pensacola State College",1,"destinee","Ms. Donna Winterberry","Florida",0,27],["Santa Fe College",1,"destinee","Dr. Wendy Heimann","Florida",0,23],["South Florida State College",1,"destinee","Sheryl McGrath","Florida",0,9],["St. Petersburg College",1,"destinee","Ms. Barbara Mulholland","Florida",0,20],["State College of Florida, Manatee, Sarasota",1,"destinee","Ms. Shankisha Sizemore","Florida",0,15],["Tallahassee Community College",1,"destinee","Ms. Debra Burtoft","Florida",0,29],["Valencia College",1,"destinee","Ms. Robin Poole","Florida",0,22],["Albany State University",1,"erica","Ms. Tammy Deese","Georgia",0,11],["Athens Technical College",1,"erica","Ms. Jennifer Nichole Burrell","Georgia",0,11],["Atlanta Technical College",1,"erica","Ms. Marisha Singleton","Georgia",0,13],["Central Georgia Technical College",1,"erica","Ms. Kelly Scruggs","Georgia",0,25],["Clayton State University",1,"erica","Dr. Naquilla Thomas","Georgia",0,23],["Columbus Technical College",1,"erica","Ms. Amber Brazile","Georgia",0,15],["Fortis College, Smyrna",1,"erica","Ms. Melissa Baker","Georgia",0,51],["Georgia Highlands College",1,"erica","Regina Gupta","Georgia",0,12],["Lanier Technical College",1,"erica","Dr. G. David Byers","Georgia",0,13],["Perimeter College of Georgia State University",1,"erica","Michelle Boyce","Georgia",0,26],["West Georgia Technical College",1,"erica","Melondy Martin","Georgia",0,11],["Savannah Technical College",1,"erica","Frances Thigpen","Georgia",0,20],["Southeastern Technical College",1,"erica","Dr Griffin Mizell","Georgia",0,5],["Wiregrass Georgia Technical College",1,"erica","Ms. Sandi Woodward","Georgia",0,9],["The Dental College of Georgia at Augusta University (Hygiene)",1,"erica","Ms. Erin Boyleston","Georgia",0,26],["Carrington College, Boise",1,"haley","Ms. Rachel Watkins","Idaho",0,57],["College of Eastern Idaho",1,"haley","Dr. Kandis Garland","Idaho",0,null],["College of Southern Idaho",1,"haley","Tiffany Clark","Idaho",0,10],["Idaho State University College of Health",1,"haley","Ms. Leciel Bono","Idaho",0,28],["North Idaho College",1,"haley","Laughlin Drake (interim)","Idaho",0,0],["Carl Sandburg College",1,"kellie","Ms. Stacey Kosier","Illinois",0,29],["College of DuPage",1,"kellie","Ms. Lori J. Drummer","Illinois",0,28],["College of Lake County",1,"kellie","Dr. Mary Beth Jacobs","Illinois",0,22],["Harper College",1,"kellie","Ms. Kathleen Hock","Illinois",0,22],["Illinois Central College",1,"kellie","Jennifer Rushing","Illinois",0,18],["Illinois Valley Community College",1,"kellie","Brenda Johnson","Illinois",0,0],["Lake Land College",1,"kellie","Debbie Johnson-Kirts","Illinois",0,24],["Lewis & Clark Community College",1,"kellie","Ms. Roberta Brown","Illinois",0,14],["Malcolm X College",1,"kellie","Ms. Caryn Tierney","Illinois",0,25],["Parkland College",1,"kellie","Ms. Laura Hettinger","Illinois",0,34],["Prairie State College",1,"kellie","Gail Szewcyzk","Illinois",0,30],["Rock Valley College",1,"kellie","Dr. Marie Navickis","Illinois",0,15],["Southern Illinois University School of Dental Medicine (Hygiene)",1,"kellie","Ms. Stacey McKinney","Illinois",0,26],["Indiana University School of Dentistry, Fort Wayne",1,"megan","Ms. Jennifer Bryant","Indiana",0,21],["Indiana University School of Dentistry, Northwest",1,"megan","Donna Krause","Indiana",0,20],["Indiana University School of Dentistry (Hygiene)",1,"megan","Ms. Twyla Rader","Indiana",0,18],["Indiana University School of Dentistry, South Bend",1,"megan","Dr. Mallory Roberts","Indiana",0,18],["Ivy Tech Community College, Anderson",1,"megan","Dr. Joyce Hudson","Indiana",0,18],["Ivy Tech Community College, South Bend",1,"megan","Ms. Kelsey Miller","Indiana",0,16],["Ivy Tech Community College, Columbus",1,"megan","Cassie Norton","Indiana",0,0],["University of Southern Indiana",1,"megan","Emily Holt","Indiana",0,23],["Hawkeye Community College",1,"terrence","Karen Wolf","Iowa",0,13],["Indian Hills Community College",1,"terrence","Ms. Presley Caldwell-Kanselaar","Iowa",0,15],["Iowa Central Community College",1,"terrence","Mr. Neale Adams","Iowa",0,15],["Iowa Western Community College",1,"terrence","Ms. Laura J. Grabow","Iowa",0,14],["Kirkwood Community College",1,"terrence","Shaunda Clark","Iowa",0,19],["Flint Hills Technical College",1,"terrence","Katherine Morgan","Kansas",0,16],["Johnson County Community College",1,"terrence","Ms. Debra Trybom","Kansas",0,18],["Salina Area Technical College",1,"terrence","Brooke Horner","Kansas",0,11],["Wichita State University",1,"terrence","Ms. Carly Havner","Kansas",0,34],["Big Sandy Community and Technical College",1,"erica","Carmen Fields","Kentucky",0,14],["Bluegrass Community and Technical College",1,"erica","Mary Jones","Kentucky",0,22],["MedQuest College",1,"erica","Garrett Westerfield","Kentucky",0,8],["University of Louisville School of Dentistry (Hygiene)",1,"erica","Dr. Jennifer Rudy","Kentucky",0,28],["Western Kentucky University",1,"erica","Dr. Joseph (Jody) Evans","Kentucky",0,27],["Louisiana State University School of Dentistry (Hygiene)",1,"terrence","Ms. Tricia Barker","Louisiana",0,37],["Southern University",1,"terrence","Terri Johnson","Louisiana",0,6],["University of Louisiana at Monroe",1,"terrence","Kimberly Whorton","Louisiana",0,26],["University of New England, Westbrook College of Health Professions",1,"karen","Dianne Smallidge","Maine",0,31],["University of Maine at Augusta Bangor",1,"karen","Nancy Mickles-Foster","Maine",0,15],["Allegany College of Maryland",1,"karen","Cathy Wakefield","Maryland",0,14],["Baltimore City Community College",1,"karen","Edna Street-Jones","Maryland",0,10],["Fortis College, Landover",1,"karen","Elizabeth (Liz) Karnasek","Maryland",0,31],["Hagerstown Community College",1,"karen","Ms. Jennifer A Suminski","Maryland",0,33],["Howard Community College",1,"karen","Susan A. Seibel","Maryland",0,27],["The Community College of Baltimore County",1,"karen","Ms. Brionna Burris","Maryland",0,22],["University of Maryland School of Dentistry (Hygiene)",1,"karen","Sheryl Syme","Maryland",0,12],["Anne Arundel Community College",1,"karen","Badal Patel","Maryland",0,null],["Massachusetts College of Pharmacy and Health Sciences",1,"karen","Lori Giblin-Scanlon","Massachusetts",0,66],["Bristol Community College",1,"karen","Sarah Wilhelmsen","Massachusetts",0,19],["Cape Cod Community College",1,"karen","Marianne Dryer","Massachusetts",0,21],["Middlesex Community College",1,"karen","Christine Lombardo","Massachusetts",0,21],["Mount Wachusett Community College",1,"karen","Kelley Martell","Massachusetts",0,10],["Quinsigamond Community College",1,"karen","Jane Gauthier","Massachusetts",0,17],["Regis College",1,"karen","Karen D. Hallisey-Pesa","Massachusetts",0,22],["Springfield Technical Community College",1,"karen","Darlene O'Brien","Massachusetts",0,16],["Delta College",1,"kellie","Pam Livingston","Michigan",0,15],["Ferris State University",1,"kellie","Kimberly Beistle","Michigan",0,46],["Grand Rapids Community College",1,"kellie","Ms. Jamie Klap","Michigan",0,27],["Jackson College",1,"kellie","Patricia Guenther","Michigan",0,10],["Kalamazoo Valley Community College",1,"kellie","Ashleigh Quinones","Michigan",0,19],["Kellogg Community College",1,"kellie","Dr. David P. Smith","Michigan",0,18],["Lansing Community College",1,"kellie","Dr. Heather Bunce","Michigan",0,20],["Macomb Community College",1,"kellie","Wendi Sparks","Michigan",0,34],["Mott Community College",1,"kellie","Keyana Morris","Michigan",0,25],["Oakland Community College",1,"kellie","Jennifer Shelbourne","Michigan",0,25],["University of Detroit Mercy School of Dentistry (Hygiene)",1,"kellie","Sally Ammar","Michigan",0,15],["University of Michigan School of Dentistry (Hygiene)",1,"kellie","Jennifer Cullen","Michigan",0,33],["Wayne County Community College District",1,"kellie","Candace Benson","Michigan",0,16],["Central Lakes College",1,"megan","Katie Thalberg","Minnesota",0,null],["Century College",1,"megan","Ms. Shannon Zurbey","Minnesota",0,12],["Herzing University",1,"megan","Dr. Ashley Elizabeth Chouinard","Minnesota",0,28],["Lake Superior College",1,"megan","Ms. Kjersta Poppe","Minnesota",0,18],["Minnesota State Community and Technical College, Moorhead",1,"megan","Ms. Robin Peltier","Minnesota",0,18],["Minnesota State University, Mankato",1,"megan","Brigette Cooper","Minnesota",0,22],["Normandale Community College",1,"megan","Ms. Rachel Kashani-Legler","Minnesota",0,23],["Rochester Community & Technical College",1,"megan","Ms. Cherie Fritz","Minnesota",0,15],["St. Cloud Technical and Community College",1,"megan","Ms. Kami Burgess","Minnesota",0,14],["University of Minnesota School of Dentistry (Hygiene)",1,"megan","Dr. Cyndee Stull","Minnesota",0,28],["Meridian Community College",1,"erica","Dr. Paige Pennington","Mississippi",0,11],["Mississippi Delta Community College",1,"erica","Catherine Dunn","Mississippi",0,12],["Pearl River Community College",1,"erica","Shanalyn Allen","Mississippi",0,15],["University of Mississippi School of Dentistry (Hygiene)",1,"erica","Elizabeth O. Carr, DHA, MDH, RDH","Mississippi",0,18],["Northeast Mississippi Community College",1,"erica","Dr. Nick Alexander, DMD","Mississippi",0,17],["Concorde Career College, Kansas City",1,"megan","Ms. Alissa Beckerle","Missouri",0,32],["Missouri Southern State University",1,"kellie","Ms. Jill Pyle","Missouri",0,27],["Ozarks Technical Community College",1,"kellie","Ms. Rebecca Cáceres","Missouri",0,20],["St. Louis Community College",1,"kellie","Jodi Patton / Maggie Malench","Missouri",0,31],["State Fair Community College",1,"megan","Dr. Andra Ferguson","Missouri",0,11],["University of Missouri, Kansas City School of Dentistry (Hygiene)",1,"megan","Ms. Tanya Villalpando Mitchell","Missouri",0,30],["Central Community College",1,"terrence","Dr. Wanda Cloet","Nebraska",0,15],["University of Nebraska Medical Center College of Dentistry (Hygiene)",1,"terrence","Dr. Tammie Vargo","Nebraska",0,23],["College of Southern Nevada",1,"haley","Daveadele \"Missy\" Abel","Nevada",0,12],["Truckee Meadows Community College",1,"haley","Lori McDonald","Nevada",0,13],["NHTI, Concord's Community College",1,"karen","Billie Lunt","New Hampshire",0,36],["Pima Medical Institute, Albuquerque",1,"haley","Melissa McDougal-Plese","New Mexico",0,20],["University of New Mexico Health Sciences Center",1,"haley","Lindsey Lee","New Mexico",0,21],["New Mexico State University, Dona Ana Community College",1,"haley","Dr. Elmer Gonzalez","New Mexico",0,10],["San Juan College",1,"haley","Dr. Julius Manz","New Mexico",0,11],["Erie Community College, North Campus",1,"karen","Ashley Krupski","New York",0,38],["Hudson Valley Community College",1,"karen","Tammy Conway","New York",0,31],["Monroe Community College",1,"karen","Dr. Marsha Bower","New York",0,29],["New York City College of Technology",1,"karen","Anna Matthews","New York",0,63],["New York University College of Dentistry (Hygiene)",1,"karen","Dianne Sefo","New York",0,51],["Plaza College",1,"karen","Dr. Laura Sleeper","New York",0,91],["Eugenio Maria De Hostos Community College",1,"karen","Salim Rayman","New York",0,39],["Farmingdale State College",1,"karen","Dr. Susan Vogell","New York",0,40],["Orange County Community College",1,"karen","Niccole Card","New York",0,14],["SUNY Broome Community College",1,"karen","Meghan McGuinness","New York",0,34],["Asheville, Buncombe Technical Community College",1,"destinee","Jeniffer Nicholson","North Carolina",0,17],["Cape Fear Community College",1,"destinee","Michelle Ezzell","North Carolina",0,9],["Catawba Valley Community College",1,"destinee","Nikki Hicks","North Carolina",0,16],["Central Carolina Community College",1,"destinee","Ms. Vicky Wesner","North Carolina",0,18],["Central Piedmont Community College",1,"destinee","Ms. Brenda Sanner","North Carolina",0,23],["Coastal Carolina Community College",1,"destinee","Jodi Crowell","North Carolina",0,19],["Fayetteville Technical Community College",1,"destinee","Amanda Jones","North Carolina",0,25],["Forsyth Technical Community College",1,"destinee","Ms. Annette Saylor","North Carolina",0,9],["Guilford Technical Community College",1,"destinee","Jasmin Haley","North Carolina",0,28],["Halifax Community College",1,"destinee","Mrs. Lisa Joy Santiago","North Carolina",0,12],["Isothermal Community College",1,"destinee","Stacey Jenkins","North Carolina",0,null],["Montgomery Community College",1,"destinee","Shannon Thomason","North Carolina",0,null],["University of North Carolina at Chapel Hill Adams School of Dentistry (Hygiene)",1,"destinee","Roxanne Dsouza Norwood","North Carolina",0,28],["Wake Technical Community College",1,"destinee","Samantha Moore","North Carolina",0,19],["Wayne Community College",1,"destinee","Ms. Brenda P. Maddox","North Carolina",0,22],["Columbus State Community College",1,"kellie","April Pace","Ohio",0,16],["Cuyahoga Community College",1,"kellie","Anne Myatt","Ohio",0,15],["Hocking College",1,"kellie","Misti Malfe","Ohio",0,17],["James A. Rhodes State College",1,"kellie","Justin Nance","Ohio",0,16],["Lakeland Community College",1,"kellie","Nicole Patel","Ohio",0,18],["Lorain County Community College",1,"kellie","Kristy Unterbrink","Ohio",0,14],["The Ohio State University College of Dentistry (Hygiene)",1,"kellie","Rebecca Henderson","Ohio",0,31],["Owens Community College",1,"kellie","Teresa Kania","Ohio",0,25],["Shawnee State University",1,"kellie","Georgeann Kamer","Ohio",0,23],["Sinclair Community College",1,"kellie","Leonarda Malyemezian","Ohio",0,35],["Stark State College",1,"kellie","Patricia Weller","Ohio",0,16],["University of Cincinnati Blue Ash College",1,"kellie","Luke Burroughs","Ohio",0,30],["Youngstown State University",1,"kellie","Bryn Hartman","Ohio",0,21],["Rose State College",1,"terrence","Ms. Esmerelda Ornelas","Oklahoma",0,12],["Tulsa Community College",1,"terrence","Ms. Rachel A Ostberg","Oklahoma",0,13],["University of Oklahoma College of Dentistry, Ardmore",1,"terrence","Mrs. Christy McCullers","Oklahoma",0,null],["University of Oklahoma College of Dentistry, Bartlesville",1,"terrence","Mrs. Tiffany Dougherty","Oklahoma",0,null],["University of Oklahoma College of Dentistry, Oklahoma City",1,"terrence","Dr. Sarah Justus-McMakin","Oklahoma",0,46],["University of Oklahoma College of Dentistry, Weatherford",1,"terrence","Mrs. Tina Tuck","Oklahoma",0,46],["Concorde Career College, Portland",1,"haley","Dominique Wilson","Oregon",0,0],["Lane Community College",1,"haley","Michelle Cummins","Oregon",0,17],["Mt. Hood Community College",1,"haley","Ms. Jennifer Aubry","Oregon",0,18],["Oregon Institute of Technology, Salem",1,"haley","Krista Beaty","Oregon",0,41],["Oregon Institute of Technology, Klamath Falls",1,"haley","Krista Beaty","Oregon",0,41],["Pacific University",1,"haley","Ms. Amy Coplen","Oregon",0,32],["Portland Community College",1,"haley","Laura Vanderwef","Oregon",0,36],["Rogue Community College",1,"haley","Carmen Mons","Oregon",0,null],["Community College of Philadelphia",1,"karen","Theresa M Grady","Pennsylvania",0,26],["Harcum College",1,"karen","Dossie Cavallucci","Pennsylvania",0,26],["Harrisburg Area Community College",1,"karen","Jill Hazenstab","Pennsylvania",0,24],["Lancaster County Career and Technology Center",1,"karen","Donna Maslin","Pennsylvania",0,15],["Northampton Community College",1,"karen","Sherri Meyers","Pennsylvania",0,19],["Pennsylvania College of Technology",1,"karen","Dr. Shawn Kiser","Pennsylvania",0,34],["University of Pittsburgh School of Dental Medicine (Hygiene)",1,"karen","Victoria Green","Pennsylvania",0,19],["Westmoreland County Community College",1,"karen","Rhonda Soberdash","Pennsylvania",0,21],["All State Career School",1,"kellie","Candice Lewis","Pennsylvania",0,19],["Fortis Institute, Scranton",1,"kellie","Anita Bendowski","Pennsylvania",0,13],["Luzerne County Community College",1,"kellie","Dr. Karen B Rainey","Pennsylvania",0,23],["Manor College",1,"kellie","Stephanie Parker","Pennsylvania",0,12],["Montgomery County Community College",1,"kellie","Debbie Gnutti","Pennsylvania",0,27],["Florence Darlington Technical College",1,"destinee","Emily Brown","South Carolina",0,10],["Greenville Technical College",1,"destinee","Dr. Kahryn Freedmen","South Carolina",0,19],["Horry Georgetown Technical College",1,"destinee","Ms. Michelle Meeker","South Carolina",0,18],["Midlands Technical College",1,"destinee","Ms. Kimberly Schneider","South Carolina",0,24],["Trident Technical College",1,"destinee","Ms. Melissa Copeland","South Carolina",0,20],["York Technical College",1,"destinee","Dr. Jonna Moreschi","South Carolina",0,0],["Chattanooga State Community College",1,"megan","Angie Maida","Tennessee",0,21],["Concorde Career College, Memphis",1,"megan","Ms. Marla Dunlap","Tennessee",0,58],["East Tennessee State University",1,"megan","Dr. Tabitha Fair","Tennessee",0,22],["Lincoln Memorial University College of Dental Medicine (Hygiene)",1,"megan","Simran Flagg","Tennessee",0,27],["Remington College",1,"megan","Rachel McBane","Tennessee",0,24],["Roane State Community College",1,"megan","Ms. Melinda Gill","Tennessee",0,9],["South College, Nashville",1,"megan","Ms. Jane Walsh","Tennessee",0,38],["Tennessee State University",1,"megan","Dr. Illeana Brandt","Tennessee",0,26],["Tennessee Wesleyan University",1,"megan","Randa Colbert","Tennessee",0,18],["University of Tennessee Health Science Center College of Dentistry",1,"megan","Brandy S. Cowen","Tennessee",0,31],["Amarillo College",1,"terrence","Amanda Lester-Chisum","Texas",0,24],["Austin Community College",1,"terrence","Michelle Landrum","Texas",0,17],["Blinn College",1,"terrence","Lisa Wiese","Texas",0,14],["Coastal Bend College",1,"terrence","Ms. Abbi Pena","Texas",0,27],["Houston City College, Coleman College for Health Sciences",1,"terrence","Ms. Hilda Guerrero","Texas",0,13],["College of the Mainland",1,"terrence","Ms. Amber Stevens","Texas",0,0],["Collin College Community College District",1,"terrence","Ms. Christine McClellan","Texas",0,22],["Concorde Career College, Dallas",1,"terrence","McKalee Conrad","Texas",0,65],["Concorde Career College, Grand Prairie",1,"terrence","Ms. Erin Delashmit","Texas",0,61],["Concorde Career College, San Antonio",1,"terrence","Ms. Caroline Bunce","Texas",0,58],["Dallas College",1,"terrence","Dr. Donna L. Wicker","Texas",0,21],["Del Mar College",1,"terrence","Ms. Eva Sepulveda","Texas",0,20],["El Paso Community College",1,"terrence","Ms. Vanessa Cisneros","Texas",0,12],["Howard College",1,"terrence","Jeri Farmer","Texas",0,11],["Lamar Institute of Technology",1,"terrence","Michelle DeMoss","Texas",0,22],["Lone Star College, Kingwood",1,"terrence","Ms. Kristi Dalton","Texas",0,24],["Midwestern State University",1,"terrence","Jill Young","Texas",0,17],["Palo Alto College",1,"terrence","Ms. Diane I Wilson","Texas",0,0],["Pima Medical Institute, Houston",1,"terrence","Carolyn Haynie","Texas",0,35],["Pima Medical Institute, San Antonio",1,"terrence","Ms. Melanie Taverna","Texas",0,null],["Tarrant County College",1,"terrence","Ms. Amy Cooper","Texas",0,21],["Temple College",1,"terrence","Ms. Melissa Machalek","Texas",0,11],["Texas A&M University College of Dentistry",1,"terrence","Ms. Leigh Ann Nurick","Texas",0,29],["Texas State Technical College at Harlingen",1,"terrence","Raquel Rico","Texas",0,19],["Texas Woman's University",1,"terrence","Ms. Charlene Dickinson","Texas",0,29],["The University of Texas Health Science Center at Houston",1,"terrence","Ms. Emily Falls","Texas",0,29],["Tyler Junior College",1,"terrence","Ms. Carrie Fortenberry Hobbs","Texas",0,28],["The University of Texas Health Science Center at San Antonio",1,"terrence","Magda De La Torre","Texas",0,18],["Wharton County Junior College",1,"terrence","Carol Derkowski","Texas",0,28],["Fortis College, Salt Lake City",1,"haley","Jodie Lopez","Utah",0,null],["Salt Lake Community College",1,"haley","Ms. Renee Mendenhall","Utah",0,23],["The Utah College of Dental Hygiene",1,"haley","Mrs. Laura I. M. Green","Utah",0,118],["Utah Tech University",1,"haley","Ms. Brenda Armstrong","Utah",0,24],["Utah Valley University",1,"haley","Ms. Sandra Wilson","Utah",0,20],["Weber State University",1,"haley","Ms. Frances McConaughy","Utah",0,29],["Germanna Community College",1,"erica","Ms. Misty Lynn Mesimer","Virginia",0,5],["Old Dominion University",1,"erica","Brenda T Bradshaw","Virginia",0,37],["Virginia Commonwealth University School of Dentistry (Hygiene)",1,"erica","Marion Manski","Virginia",0,33],["Wytheville Community College",1,"erica","Amber Shuler","Virginia",0,18],["Northern Virginia Community College",1,"erica","Ms. Elizabeth Di Silvio","Virginia",0,30],["Virginia Western Community College",1,"erica","Lori Ellington","Virginia",0,33],["Bellingham Technical College",1,"haley","Nina Karhinen","Washington",0,10],["Clark College",1,"haley","Kristi Taylor","Washington",0,25],["Columbia Basin College",1,"haley","Kristen Lauerman","Washington",0,16],["Eastern Washington University",1,"haley","Lorie Speer","Washington",0,38],["Lake Washington Institute of Technology",1,"haley","Kellie Whitcomb","Washington",0,30],["Peninsula College",1,"haley","Paula Watson","Washington",0,null],["Pierce College",1,"haley","Tammy Sanderson","Washington",0,16],["Pima Medical Institute, Seattle",1,"haley","Carmon Stone","Washington",0,32],["Seattle Central College",1,"haley","Lauren Acheson (interim)","Washington",0,19],["Shoreline Community College",1,"haley","Dr. Nikki Honey","Washington",0,14],["Yakima Valley College",1,"haley","Cheri Podruzny","Washington",0,18],["BridgeValley Community and Technical College",1,"erica","Robyn Mills","West Virginia",0,19],["West Liberty University",1,"erica","Stephanie Meredith","West Virginia",0,31],["West Virginia University School of Dentistry (Hygiene)",1,"erica","Amy Funk","West Virginia",0,19],["Blackhawk Technical College",1,"megan","Ms. Lisa Johnson","Wisconsin",0,12],["Chippewa Valley Technical College",1,"megan","Ms. Pam Entorf","Wisconsin",0,14],["Fox Valley Technical College",1,"megan","Mrs. Robin Eichhorst","Wisconsin",0,13],["Lakeshore College",1,"megan","Christina McGinnis","Wisconsin",0,null],["Madison Area Technical College",1,"megan","Ms. Christine Traeder","Wisconsin",0,40],["Milwaukee Area Technical College",1,"megan","Ms. Tonia Morley","Wisconsin",0,40],["Northcentral Technical College",1,"megan","Ms. Deb Koziel","Wisconsin",0,33],["Northeast Wisconsin Technical College",1,"megan","Ms. Sheila Jean Gross-Rogers","Wisconsin",0,20],["Waukesha County Technical College",1,"megan","Lindsey Selbera","Wisconsin",0,13]];
+const nn=v=>v===''||v==null?null:+v;
+function seed(){
+  return {v:1,rosterV:0,
+    recruiters:REC_SEED.map(([id,name,track,budget,target])=>({id,name,track,budget,target})),
+    dental:DENTAL_SEED.split('\n').map((l,i)=>{const [name,loc,recruiter,target,budget]=l.split('|');return {id:'d'+(i+1),name,loc,recruiter,target:+target,budget:+budget,hires:0,notes:''}}),
+    hygiene:HYG_SEED.split('\n').map((l,i)=>{const [name,state,recruiter,cs,goal,support]=l.split('|');return {id:'h'+(i+1),name,state,recruiter,classSize:nn(cs),goal:nn(goal),support,hires:0,budget:0,notes:''}}),
+    contacts:[],events:[],transfers:[],resources:[],archives:[]};
+}
+
+/* ---------- roster (recruiter + contact per school) ---------- */
+const RMAP={jessica:'jess',hillary:'amadi',chris:'destinee'};
+const ALIAS={hillsboroughcommunitycollege:'hillsboroughcollege'};
+const nrm=n=>String(n||'').toLowerCase().replace(/\(.*?\)/g,'').replace(/&/g,'and').replace(/[^a-z0-9]/g,'');
+function applyRoster(S){
+  const old=S.recruiters||[];
+  S.recruiters=REC_SEED.map(([id,name,track,budget,target])=>{const o=old.find(r=>r.id===id)||old.find(r=>RMAP[r.id]===id);return {id,name,track,budget:o?o.budget:budget,target:o?o.target:target}});
+  const fix=id=>RMAP[id]||id;
+  S.events.forEach(e=>e.recruiter=fix(e.recruiter));S.transfers.forEach(t=>t.recruiter=fix(t.recruiter));
+  S.dental.concat(S.hygiene).forEach(s=>s.recruiter=fix(s.recruiter));
+  const claimed={dental:new Set(),hygiene:new Set()};let added=0,newContacts=0;
+  ROSTER.forEach(([name,seg,rid,contact,state,budget,grads])=>{
+    const kind=seg?'hygiene':'dental',list=S[kind],k=nrm(name);
+    let s=list.find(x=>!claimed[kind].has(x.id)&&(x.dashName===name||nrm(x.name)===k||ALIAS[nrm(x.name)]===k));
+    if(!s)s=list.find(x=>{const n=nrm(x.name);return !claimed[kind].has(x.id)&&!x.dashName&&n.length>12&&k.length>12&&(n.startsWith(k)||k.startsWith(n))});
+    if(!s){s=kind==='dental'?{id:'d'+uid(),loc:state,state,target:0,budget:budget||0,hires:0,notes:''}:{id:'h'+uid(),state,classSize:grads??null,goal:null,support:'Strategic',hires:0,budget:budget||0,notes:''};list.push(s);added++}
+    claimed[kind].add(s.id);s.name=name;s.dashName=name;s.recruiter=rid;
+    contact.split(/\s+\/\s+/).map(x=>x.trim()).filter(Boolean).forEach(cn=>{
+      if(!S.contacts.some(c=>c.kind===kind&&c.schoolId===s.id&&c.name.toLowerCase()===cn.toLowerCase())){S.contacts.push({id:uid(),kind,schoolId:s.id,name:cn,title:'',email:'',phone:'',lastTouch:'',followUp:'',notes:''});newContacts++}});
+  });
+  S.dental.sort((a,b)=>a.name.localeCompare(b.name));S.hygiene.sort((a,b)=>a.name.localeCompare(b.name));
+  S.rosterV=1;return {added,newContacts};
+}
+
+/* ---------- state + storage ---------- */
+let S=null,DASH=null;
+const DKEY='campus-playbook-dashboard-v1';
+let saveMsg='Starting…';
+const KEY='campus-playbook-v1';
+let canShared=false,saveTimer=null;
+async function loadState(){
+  try{ if(window.storage){ canShared=true; const r=await window.storage.get(KEY,true); if(r&&r.value) return JSON.parse(r.value); } }catch(e){}
+  try{ if(!window.storage&&window.localStorage){ const v=localStorage.getItem(KEY); if(v) return JSON.parse(v);} }catch(e){}
+  return null;
+}
+function persist(){
+  saveMsg='Saving…'; paintSave();
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    const data=JSON.stringify(S);
+    try{
+      if(window.storage){ const r=await window.storage.set(KEY,data,true); saveMsg=r?'Saved for the whole team':'Could not save. Use Data & backup.'; }
+      else if(window.localStorage){ localStorage.setItem(KEY,data); saveMsg='Saved on this device'; }
+      else saveMsg='Not saved. Use Data & backup.';
+    }catch(e){ saveMsg='Not saved in this view. Use Data & backup to keep your work.'; }
+    paintSave();
+  },500);
+}
+async function loadDash(){try{if(window.storage){const r=await window.storage.get(DKEY,true);if(r&&r.value)return JSON.parse(r.value)}else if(window.localStorage){const v=localStorage.getItem(DKEY);if(v)return JSON.parse(v)}}catch(e){}return null}
+async function saveDash(){const data=JSON.stringify(DASH);try{if(window.storage)await window.storage.set(DKEY,data,true);else if(window.localStorage)localStorage.setItem(DKEY,data);return true}catch(e){return false}}
+function paintSave(){const el=$('.savestate');if(el)el.textContent=saveMsg}
+
+/* ---------- ui state ---------- */
+const now=new Date();
+let ui={view:'dashboard',drawer:null,
+  dash:{scope:'all',rec:'',dental:'',hyg:'',type:''},
+  cal:{y:now.getFullYear(),m:now.getMonth(),scope:'all',rec:''},
+  dsch:{q:'',rec:''},hsch:{q:'',support:'',rec:'',state:''},
+  con:{scope:'all',q:'',dental:'',hyg:'',rec:'',state:'',show:'all',limit:48},
+  ev:{scope:'all',track:'all',q:'',rec:'',dental:'',hyg:'',type:'',status:''},
+  tr:{scope:'all',track:'all',q:'',rec:'',dental:'',hyg:'',year:''},
+  sub:{type:'dental',date:''}};
+let dataBuf={name:'',text:'',mime:'text/plain'};
+
+/* ---------- lookups ---------- */
+const recById=id=>S.recruiters.find(r=>r.id===id);
+const recName=id=>{const r=recById(id);return r?r.name:'Unassigned'};
+const getSchool=(kind,id)=>(kind==='dental'?S.dental:S.hygiene).find(s=>s.id===id);
+const schoolName=(kind,id)=>{const s=getSchool(kind,id);return s?s.name:'(removed school)'};
+const sTarget=(kind,s)=>kind==='dental'?(s.target||0):(s.goal||0);
+const evFor=(kind,id)=>S.events.filter(e=>e.kind===kind&&e.schoolId===id);
+const trFor=(kind,id)=>S.transfers.filter(t=>t.kind===kind&&t.schoolId===id);
+const spendEv=e=>e.status==='Invoiced'?(+e.actualCost||0):0;
+const schoolSpend=(kind,id)=>evFor(kind,id).reduce((a,e)=>a+spendEv(e),0);
+const initials=n=>n.replace(/[^A-Za-z ]/g,' ').split(/\s+/).filter(w=>w.length>2&&!/^(the|of|and|for)$/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+const followUpsDue=(days=14)=>{const lim=addDays(today(),days);return S.contacts.filter(c=>c.followUp&&c.followUp<=lim).sort((a,b)=>a.followUp<b.followUp?-1:1)};
+
+/* ---------- icons + small components ---------- */
+const IC={dashboard:'<path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',dental:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',hygiene:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16v4M17 18h4"/>',contacts:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',events:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',transfers:'<path d="M7 7h13l-3-3M17 17H4l3 3"/>',submit:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',resources:'<path d="M4 4h10a4 4 0 014 4v12H8a4 4 0 01-4-4z"/><path d="M8 8h6"/>',archives:'<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11h14V8M10 12h4"/>'};
+const NAV=[['dashboard','Dashboard'],['calendar','Calendar'],['dental','Dental schools'],['hygiene','Hygiene schools'],['contacts','Contacts'],['events','Events'],['transfers','2:1 transfers'],['submit','Add event'],['resources','Resources'],['archives','Archives & data']];
+const seg=(path,opts,val)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button type="button" class="${val===v?'on':''}" data-set="${path}" data-val="${v}">${l}</button>`).join('')}</div>`;
+const sel=(path,opts,val,label)=>`<select data-bind="${path}" ${label?`aria-label="${esc(label)}"`:''}>${opts.map(([v,l])=>`<option value="${esc(v)}" ${String(v)===String(val)?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
+const search=(path,val,ph)=>`<input type="search" id="q-${path.replace('.','-')}" data-bind="${path}" value="${esc(val)}" placeholder="${esc(ph)}" aria-label="${esc(ph)}" style="min-width:230px">`;
+const head=(t,p,a)=>`<div class="head"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div><div class="acts">${a||''}</div></div>`;
+const recOpts=(all='All recruiters')=>[['',all],...S.recruiters.map(r=>[r.id,r.name])];
+const schoolOptsHtml=(kind,selId)=>`<option value="">Select a school…</option>`+(kind==='dental'?S.dental:S.hygiene).map(s=>`<option value="${s.id}" ${s.id===selId?'selected':''}>${esc(s.name)}</option>`).join('');
+const recOptsHtml=selId=>`<option value="">Select a recruiter…</option><optgroup label="Doctor recruiters">${S.recruiters.filter(r=>r.track==='DOC').map(r=>`<option value="${r.id}" ${r.id===selId?'selected':''}>${esc(r.name)}</option>`).join('')}</optgroup><optgroup label="Hygiene recruiters">${S.recruiters.filter(r=>r.track==='HYG').map(r=>`<option value="${r.id}" ${r.id===selId?'selected':''}>${esc(r.name)}</option>`).join('')}</optgroup>`;
+const recTag=id=>{const r=recById(id);return r?`${esc(r.name)}<span class="tag ${r.track}">${r.track}</span>`:'<span class="muted">Unassigned</span>'};
+const typePill=t=>`<span class="pill" style="--c:${TYPES[t]||'#999'}">${esc(t)}</span>`;
+const field=(label,inner,cls='')=>`<label class="fld ${cls}"><span>${label}</span>${inner}</label>`;
+const kindSeg=(kind,id='kind')=>`<div class="seg" data-kindseg>${[['dental','Dental school'],['hygiene','Hygiene school']].map(([v,l])=>`<label class="${kind===v?'on':''}"><input type="radio" name="${id}" value="${v}" ${kind===v?'checked':''} hidden>${l}</label>`).join('')}</div>`;
+
+/* ---------- modal / toast ---------- */
+function modal(html,wide){const root=$('#modal-root');const old=root.querySelector('.modal');const st=old?old.scrollTop:0;
+  root.innerHTML=`<div class="scrim" data-scrim><div class="modal ${wide?'wide':''}" role="dialog" aria-modal="true">${html}</div></div>`;
+  const m=root.querySelector('.modal');if(old)m.scrollTop=st;const f=m.querySelector('[autofocus],input:not([type=hidden]),select,textarea');if(f&&!old&&!f.dataset.sf)f.focus();}
+function closeModal(){$('#modal-root').innerHTML='';ui.drawer=null}
+function backFromForm(){if(ui.drawer)openDrawer();else closeModal()}
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>t.style.display='none',2600)}
+function confirmModal(msg,act,id,label='Delete'){modal(`<h2>Are you sure?</h2><p>${msg}</p><div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" data-act="${ui.drawer?'drawer-back':'close'}">Cancel</button><button class="btn primary" data-act="${act}" data-id="${esc(id)}">${label}</button></div>`)}
+function dataModal(title,name,text,mime,note){dataBuf={name,text,mime};modal(`<button class="btn sm x" data-act="close">Close</button><h2>${esc(title)}</h2>${note?`<p class="muted">${note}</p>`:''}<textarea class="ro" readonly id="databuf">${esc(text.length>150000?'This file is large ('+Math.round(text.length/1024)+' KB), so it is not previewed here. Use Download or Copy.':text)}</textarea><div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" data-act="copy-buf">Copy</button><button class="btn primary" data-act="dl-buf">Download ${esc(name)}</button></div>`)}
+
+/* ---------- csv ---------- */
+function parseCSV(t){const rows=[];let r=[],f='',q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else if(c==='"')q=true;else if(c===','){r.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;r.push(f);f='';rows.push(r);r=[]}else f+=c}
+  if(f!==''||r.length){r.push(f);rows.push(r)}return rows.filter(x=>x.some(v=>v.trim()!==''))}
+const csvCell=v=>{v=v==null?'':String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const toCSV=rows=>rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
+
+/* ---------- filters ---------- */
+function evMatches(e,f){
+  if(f.scope!=='all'&&e.kind!==f.scope)return false;
+  const r=recById(e.recruiter);
+  if(f.track!=='all'&&(!r||(f.track==='doctor'?r.track!=='DOC':r.track!=='HYG')))return false;
+  if(f.rec&&e.recruiter!==f.rec)return false;
+  if(f.dental&&!(e.kind==='dental'&&e.schoolId===f.dental))return false;
+  if(f.hyg&&!(e.kind==='hygiene'&&e.schoolId===f.hyg))return false;
+  if(f.type&&e.type!==f.type)return false;
+  if(f.status&&e.status!==f.status)return false;
+  if(f.q&&!(e.name+' '+schoolName(e.kind,e.schoolId)+' '+(e.notes||'')).toLowerCase().includes(f.q.toLowerCase()))return false;
+  return true;
+}
+function trMatches(t,f){
+  if(f.scope!=='all'&&t.kind!==f.scope)return false;
+  const r=recById(t.recruiter);
+  if(f.track!=='all'&&(!r||(f.track==='doctor'?r.track!=='DOC':r.track!=='HYG')))return false;
+  if(f.rec&&t.recruiter!==f.rec)return false;
+  if(f.dental&&!(t.kind==='dental'&&t.schoolId===f.dental))return false;
+  if(f.hyg&&!(t.kind==='hygiene'&&t.schoolId===f.hyg))return false;
+  if(f.year&&String(t.gradYear)!==String(f.year))return false;
+  if(f.q&&!(t.candidate+' '+(t.email||'')+' '+schoolName(t.kind,t.schoolId)).toLowerCase().includes(f.q.toLowerCase()))return false;
+  return true;
+}
+
+/* ---------- dashboard math ---------- */
+function dashData(f=ui.dash){
+  const recs=S.recruiters.filter(r=>(f.scope==='all'||(f.scope==='dental'&&r.track==='DOC')||(f.scope==='hygiene'&&r.track==='HYG'))&&(!f.rec||r.id===f.rec));
+  const rid=new Set(recs.map(r=>r.id));
+  let dental=f.scope==='hygiene'?[]:S.dental.filter(s=>rid.has(s.recruiter)&&(!f.dental||s.id===f.dental));
+  let hyg=f.scope==='dental'?[]:S.hygiene.filter(s=>rid.has(s.recruiter)&&(!f.hyg||s.id===f.hyg));
+  if(f.dental&&!f.hyg)hyg=[]; if(f.hyg&&!f.dental)dental=[];
+  const dset=new Set(dental.map(s=>s.id)),hset=new Set(hyg.map(s=>s.id));
+  const inScope=x=>x.kind==='dental'?dset.has(x.schoolId):hset.has(x.schoolId);
+  const evAll=S.events.filter(inScope);
+  const ev=evAll.filter(e=>!f.type||e.type===f.type);
+  const tr=S.transfers.filter(inScope);
+  const schoolFilter=!!(f.dental||f.hyg);
+  const sum=(a,fn)=>a.reduce((x,y)=>x+fn(y),0);
+  const budget=schoolFilter?sum(dental,s=>s.budget||0)+sum(hyg,s=>s.budget||0):sum(recs,r=>r.budget);
+  const target=schoolFilter?sum(dental,s=>s.target||0)+sum(hyg,s=>s.goal||0):sum(recs,r=>r.target);
+  const hires=sum(dental,s=>s.hires)+sum(hyg,s=>s.hires);
+  const inv=ev.filter(e=>e.status==='Invoiced');
+  const spend=sum(inv,e=>+e.actualCost||0);
+  const held=ev.filter(e=>e.status==='Held'||e.status==='Invoiced');
+  const attendees=sum(held,e=>+e.attendees||0);
+  const invAtt=sum(inv,e=>+e.attendees||0);
+  const committed=sum(ev.filter(e=>e.status!=='Invoiced'&&e.status!=='Cancelled'),e=>(e.actualCost!=null&&e.actualCost!==''?+e.actualCost:+e.estCost)||0);
+  const rows=recs.map(r=>{
+    const myD=dental.filter(s=>s.recruiter===r.id),myH=hyg.filter(s=>s.recruiter===r.id);
+    const b=schoolFilter?sum(myD,s=>s.budget||0)+sum(myH,s=>s.budget||0):r.budget;
+    const t=schoolFilter?sum(myD,s=>s.target||0)+sum(myH,s=>s.goal||0):r.target;
+    const sp=sum(ev.filter(e=>e.recruiter===r.id),spendEv);
+    return {r,budget:b,target:t,spend:sp,hires:sum(myD,s=>s.hires)+sum(myH,s=>s.hires)};
+  });
+  return {recs,dental,hyg,inScope,ev,evAll,tr,budget,target,hires,spend,held,attendees,invCount:inv.length,invAtt,committed,rows,transfers:tr.length};
+}
+function barChart(rows){
+  if(!rows.length)return '<div class="empty">No recruiters match these filters.</div>';
+  const W=720,H=270,L=34,B=30,T=10,R=8;
+  const max=Math.max(10,...rows.flatMap(r=>[r.hires,r.target])),top=Math.ceil(max/10)*10;
+  const ih=H-T-B,iw=W-L-R,gw=iw/rows.length,bw=Math.min(16,gw/3.2);
+  const y=v=>T+ih-(v/top)*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Hires versus target by recruiter">`;
+  for(let i=0;i<=5;i++){const v=top/5*i;s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="10.5" style="fill:var(--muted)">${Math.round(v)}</text>`}
+  rows.forEach((r,i)=>{const cx=L+gw*i+gw/2;
+    s+=`<rect x="${cx-bw-1}" y="${y(r.hires)}" width="${bw}" height="${T+ih-y(r.hires)}" rx="2" style="fill:var(--hires)"><title>${esc(r.r.name)} hires: ${r.hires}</title></rect>`;
+    s+=`<rect x="${cx+1}" y="${y(r.target)}" width="${bw}" height="${T+ih-y(r.target)}" rx="2" style="fill:var(--target)"><title>${esc(r.r.name)} target: ${r.target}</title></rect>`;
+    s+=`<text x="${cx}" y="${H-10}" text-anchor="middle" font-size="11" style="fill:var(--muted)">${esc(r.r.name.split(' ')[0])}</text>`});
+  return s+'</svg>';
+}
+function donut(counts,selType){
+  const total=counts.reduce((a,c)=>a+c[1],0);
+  if(!total)return '<div class="empty">No events for these filters.<br><button class="link" data-nav="submit">Add an event</button></div>';
+  let acc=0;
+  const segs=counts.map(([t,n])=>{const p=n/total*100;const el=`<circle r="15.9155" cx="21" cy="21" fill="none" stroke="${TYPES[t]}" stroke-width="6" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${25-acc}" data-act="mix" data-type="${esc(t)}" style="cursor:pointer;opacity:${selType&&selType!==t?.25:1}"><title>${esc(t)}: ${n}</title></circle>`;acc+=p;return el}).join('');
+  return `<div class="donut"><svg viewBox="0 0 42 42" role="img" aria-label="Event mix">${segs}<text x="21" y="23.5" text-anchor="middle" font-size="8">${total}</text></svg><ul class="legend">${counts.map(([t,n])=>`<li data-act="mix" data-type="${esc(t)}" style="--c:${TYPES[t]}"><i></i>${esc(t)}<em>${n}</em></li>`).join('')}</ul></div>`;
+}
+
+/* ---------- views ---------- */
+const VIEWS={};
+VIEWS.dashboard=()=>{
+  const f=ui.dash,D=dashData();
+  const hp=pctOf(D.hires,D.target),bp=pctOf(D.spend,D.budget),remaining=D.budget-D.spend;
+  const mix={};D.evAll.forEach(e=>mix[e.type]=(mix[e.type]||0)+1);
+  const counts=Object.entries(mix).sort((a,b)=>b[1]-a[1]);
+  const upcoming=D.ev.filter(e=>e.date>=today()&&e.status!=='Cancelled').sort(byDate).slice(0,5);
+  const fups=followUpsDue(14).filter(c=>D.inScope({kind:c.kind,schoolId:c.schoolId})).slice(0,6);
+  const cell=(k,v,sub)=>`<div><div class="k">${k}</div><div class="v">${v}</div><div class="k">${sub}</div></div>`;
+  return head('Team dashboard','Hires, budget, events, and 2:1 transfers across doctor and hygiene recruiting.',`<button class="btn" data-act="team-edit">Edit budgets & targets</button>`)+
+  `<div class="filters">${seg('dash.scope',[['all','All schools'],['dental','Dental'],['hygiene','Hygiene']],f.scope)}
+    ${sel('dash.rec',recOpts(),f.rec,'Recruiter')}
+    ${sel('dash.dental',[['',`All dental schools (${S.dental.length})`],...S.dental.map(s=>[s.id,s.name])],f.dental,'Dental school')}
+    ${sel('dash.hyg',[['',`All hygiene schools (${S.hygiene.length})`],...S.hygiene.map(s=>[s.id,s.name])],f.hyg,'Hygiene school')}
+    ${f.type?`<button class="chip info" data-act="mix" data-type="${esc(f.type)}">Event type: ${esc(f.type)} \u2715</button>`:''}</div>`+
+  `<section class="panel hero"><div><div class="lbl">Hires toward target</div><div class="big">${D.hires}<small> of ${D.target}</small></div><div class="bar"><i style="width:${Math.min(100,hp)}%"></i></div><div class="meta"><span>${hp}% of target</span><span>${Math.max(0,D.target-D.hires)} to go</span></div></div>
+   <div><div class="lbl">Budget spent (invoiced)</div><div class="big">${money(D.spend)}<small> of ${money(D.budget)}</small></div><div class="bar gold ${bp>100?'over':''}"><i style="width:${Math.min(100,bp)}%"></i></div><div class="meta"><span>${money(remaining)} remaining</span><span>${money(D.committed)} committed to open events</span></div></div></section>`+
+  `<section class="panel ledger">${cell('Leads',D.attendees,'attendees at held events')+cell('Events held',D.held.length,`${D.ev.length} total on the books`)+cell('2:1 transfers',D.transfers,'candidates handed off')+cell('Total budget',money(D.budget),'allocated this year')+cell('Cost per event',money(D.invCount?D.spend/D.invCount:0),`across ${D.invCount} invoiced`)+cell('Cost per attendee',money(D.invAtt?D.spend/D.invAtt:0),'invoiced events only')}</section>`+
+  `<div class="grid2"><section class="panel pad"><h2>Hires vs. target by recruiter</h2><div class="sub">Current-year hires against each recruiter\u2019s annual target</div>${barChart(D.rows)}<div class="sub" style="display:flex;gap:16px;justify-content:center"><span><b style="color:var(--hires)">\u25A0</b> Hires</span><span><b style="color:var(--target)">\u25A0</b> Target</span></div></section>
+   <section class="panel pad"><h2>Event mix</h2><div class="sub" style="margin-bottom:12px">Select a type to filter the dashboard</div>${donut(counts,f.type)}</section></div>`+
+  `<div class="grid2 even"><section class="panel pad"><h2>Next events</h2><div class="sub">Upcoming, soonest first</div>${upcoming.length?`<ul class="rows">${upcoming.map(e=>{const d=parseISO(e.date);return `<li data-act="edit-event" data-id="${e.id}"><div class="dt"><b>${d.getDate()}</b><span>${MONTHS[d.getMonth()].slice(0,3)}</span></div><div class="grow"><b>${esc(e.name)}</b><span class="muted">${esc(schoolName(e.kind,e.schoolId))} \u00b7 ${esc(recName(e.recruiter))}</span></div>${typePill(e.type)}</li>`}).join('')}</ul>`:`<div class="empty">Nothing scheduled.<br><button class="link" data-nav="submit">Add an event</button></div>`}</section>
+   <section class="panel pad"><h2>Follow-ups due</h2><div class="sub">School contacts with a follow-up in the next 14 days</div>${fups.length?`<ul class="rows">${fups.map(c=>`<li data-act="open-school" data-kind="${c.kind}" data-sid="${c.schoolId}"><div class="grow"><b>${esc(c.name)}</b><span class="muted">${esc(schoolName(c.kind,c.schoolId))}</span></div><span class="chip ${c.followUp<today()?'bad':'warn'}">${c.followUp<today()?'Overdue \u00b7 ':''}${fmtDate(c.followUp)}</span></li>`).join('')}</ul>`:`<div class="empty">No follow-ups due.<br>Set a follow-up date on a school contact to see it here.</div>`}</section></div>`+
+  `<section class="panel"><div style="padding:16px 20px 4px"><h2>Budget vs. spend by recruiter</h2><div class="sub">Spend counts events marked Invoiced</div></div><div class="tw"><table><thead><tr><th>Recruiter</th><th class="r">Budget</th><th class="r">Spend</th><th class="r">Remaining</th><th style="min-width:180px">Utilization</th></tr></thead><tbody>${D.rows.map(x=>{const p=pctOf(x.spend,x.budget);return `<tr><td>${recTag(x.r.id)}</td><td class="r">${money(x.budget)}</td><td class="r">${money(x.spend)}</td><td class="r">${money(x.budget-x.spend)}</td><td><div style="display:flex;gap:8px;align-items:center"><div class="bar gold ${p>100?'over':''}" style="flex:1"><i style="width:${Math.min(100,p)}%"></i></div><span class="muted num" style="width:36px;text-align:right">${p}%</span></div></td></tr>`}).join('')||'<tr><td colspan="5" class="empty">No recruiters match.</td></tr>'}</tbody><tfoot><tr><td>Total</td><td class="r">${money(D.budget)}</td><td class="r">${money(D.spend)}</td><td class="r">${money(remaining)}</td><td></td></tr></tfoot></table></div></section>`;
+};
+
+VIEWS.calendar=()=>{
+  const c=ui.cal,first=new Date(c.y,c.m,1),start=new Date(c.y,c.m,1-first.getDay());
+  const evs=S.events.filter(e=>(c.scope==='all'||e.kind===c.scope)&&(!c.rec||e.recruiter===c.rec));
+  const inMonth=evs.filter(e=>{const d=parseISO(e.date);return d.getFullYear()===c.y&&d.getMonth()===c.m}).sort(byDate);
+  const t=today();let cells='';
+  for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);if(i>=35&&d.getMonth()!==c.m)break;
+    const iso=fmtISO(d),de=evs.filter(e=>e.date===iso).sort((a,b)=>a.name<b.name?-1:1);
+    cells+=`<div class="day ${d.getMonth()!==c.m?'out':''} ${iso===t?'today':''}"><span class="n">${d.getDate()}</span><button class="addday" data-act="new-on" data-date="${iso}" title="Add an event on ${fmtDate(iso)}" aria-label="Add an event on ${fmtDate(iso)}">+</button>${de.slice(0,3).map(e=>`<button class="ev ${e.status==='Cancelled'?'x':''}" style="--c:${TYPES[e.type]}" data-act="edit-event" data-id="${e.id}" title="${esc(e.name)} \u2013 ${esc(schoolName(e.kind,e.schoolId))}">${esc(e.name)}</button>`).join('')}${de.length>3?`<div class="more">+${de.length-3} more</div>`:''}</div>`}
+  const obs=OBSERVANCES[c.m+1]||[];
+  return head('Recruiting calendar','Every school visit, career fair, and dinner in one place. Hover a day and select + to add an event.','')+
+  `<div class="filters">${seg('cal.scope',[['all','All'],['dental','Dental'],['hygiene','Hygiene']],c.scope)}${sel('cal.rec',recOpts(),c.rec,'Recruiter')}</div>`+
+  `<div class="panel calbar"><button class="btn" data-act="cal-prev" aria-label="Previous month">\u2039</button><div style="text-align:center"><h2>${MONTHS[c.m]} ${c.y}</h2><div class="sub">${inMonth.length} event${inMonth.length===1?'':'s'} this month</div></div><button class="btn" data-act="cal-next" aria-label="Next month">\u203A</button><button class="btn" data-act="cal-today">Today</button><div class="legend-row">${Object.entries(TYPES).map(([k,v])=>`<span style="--c:${v}"><i></i>${k}</span>`).join('')}</div></div>`+
+  (obs.length?`<div class="panel pad" style="margin-bottom:12px;padding:12px 18px"><b>Industry observances this month</b><div class="sub">Good hooks for outreach, content, and event themes</div><div class="obs">${obs.map(o=>`<span class="chip bad">${esc(o)}</span>`).join('')}</div></div>`:'')+
+  `<div class="panel cal">${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="dow">${d}</div>`).join('')}${cells}</div>`+
+  `<section class="panel pad" style="margin-top:16px"><h2>Events in ${MONTHS[c.m]} ${c.y}</h2><div class="sub">Sorted by date</div>${inMonth.length?`<ul class="rows">${inMonth.map(e=>{const d=parseISO(e.date);return `<li data-act="edit-event" data-id="${e.id}"><div class="dt"><b>${d.getDate()}</b><span>${MONTHS[d.getMonth()].slice(0,3)}</span></div><div class="grow"><b>${esc(e.name)}</b><span class="muted">${esc(schoolName(e.kind,e.schoolId))} \u00b7 ${esc(recName(e.recruiter))}</span></div>${typePill(e.type)}<span class="chip">${e.status}</span></li>`}).join('')}</ul>`:`<div class="empty">No events scheduled for ${MONTHS[c.m]}.<br><button class="link" data-nav="submit">Add an event</button></div>`}</section>`;
+};
+
+VIEWS.dental=()=>{
+  const f=ui.dsch;
+  const list=S.dental.filter(s=>(!f.rec||s.recruiter===f.rec)&&(!f.q||(s.name+' '+s.loc).toLowerCase().includes(f.q.toLowerCase())));
+  return head('Dental schools',`${list.length} of ${S.dental.length} schools shown. Select a row for the full profile.`,`<button class="btn" data-act="import-schools" data-kind="dental">Import CSV</button><button class="btn primary" data-act="add-school" data-kind="dental">Add school</button>`)+
+  `<div class="filters">${search('dsch.q',f.q,'Search schools or city')}${sel('dsch.rec',recOpts(),f.rec,'Recruiter')}</div>`+
+  `<div class="panel tw"><table><thead><tr><th>Dental school</th><th>Location</th><th>Recruiter</th><th class="r">Hires / target</th><th class="r">Events</th><th class="r">Budget</th><th class="r">Remaining</th></tr></thead><tbody>${list.map(s=>{const p=pctOf(s.hires,s.target);return `<tr class="click" data-act="open-school" data-kind="dental" data-sid="${s.id}"><td><b>${esc(s.name)}</b></td><td class="muted">${esc(s.loc)}</td><td>${recTag(s.recruiter)}</td><td class="r">${s.hires} / ${s.target} <span class="chip ${p>=100?'ok':''}">${p}%</span></td><td class="r">${evFor('dental',s.id).length}</td><td class="r">${money(s.budget)}</td><td class="r">${money(s.budget-schoolSpend('dental',s.id))}</td></tr>`}).join('')||'<tr><td colspan="7" class="empty">No schools match. Clear the search or add a school.</td></tr>'}</tbody></table></div>`;
+};
+
+VIEWS.hygiene=()=>{
+  const f=ui.hsch;
+  const states=[...new Set(S.hygiene.map(s=>s.state).filter(Boolean))].sort();
+  const list=S.hygiene.filter(s=>(!f.rec||s.recruiter===f.rec)&&(!f.support||s.support===f.support)&&(!f.state||s.state===f.state)&&(!f.q||(s.name+' '+s.state+' '+recName(s.recruiter)).toLowerCase().includes(f.q.toLowerCase())));
+  return head('Hygiene schools',`${list.length} of ${S.hygiene.length} schools shown. Select a row for the full profile.`,`<button class="btn" data-act="import-schools" data-kind="hygiene">Import CSV</button><button class="btn primary" data-act="add-school" data-kind="hygiene">Add school</button>`)+
+  `<div class="filters">${search('hsch.q',f.q,'Search schools, state, or recruiter')}${sel('hsch.support',[['','All support levels'],...SUPPORT.map(x=>[x,x])],f.support,'Support level')}${sel('hsch.rec',recOpts(),f.rec,'Recruiter')}${sel('hsch.state',[['','All states'],...states.map(x=>[x,x])],f.state,'State')}</div>`+
+  `<div class="panel tw"><table><thead><tr><th>Hygiene school</th><th>Location</th><th>Recruiter</th><th class="r">Hires / target</th><th class="r">Events</th><th class="r">Budget</th><th class="r">Remaining</th></tr></thead><tbody>${list.map(s=>{const g=s.goal||0,p=pctOf(s.hires,g);return `<tr class="click" data-act="open-school" data-kind="hygiene" data-sid="${s.id}"><td><b>${esc(s.name)}</b> <span class="chip ${s.support==='Advancing'?'ok':'info'}" style="margin-left:6px">${esc(s.support||'')}</span></td><td class="muted">${esc(s.state)}</td><td>${recTag(s.recruiter)}</td><td class="r">${s.hires} / ${g} <span class="chip ${p>=100?'ok':''}">${p}%</span></td><td class="r">${evFor('hygiene',s.id).length}</td><td class="r">${money(s.budget)}</td><td class="r">${money((s.budget||0)-schoolSpend('hygiene',s.id))}</td></tr>`}).join('')||'<tr><td colspan="7" class="empty">No schools match. Clear the search or add a school.</td></tr>'}</tbody></table></div>`;
+};
+
+function contactRow(c){
+  const due=c.followUp?`<span class="chip ${c.followUp<today()?'bad':'warn'}">Follow up ${fmtDate(c.followUp)}</span>`:'';
+  return `<div class="contact"><div class="top"><div><b>${esc(c.name)}</b><div class="muted" style="font-size:12.5px">${esc(c.title||'')}</div></div><div style="display:flex;gap:4px"><button class="btn sm" data-act="edit-contact" data-id="${c.id}">Edit</button><button class="btn sm danger" data-act="del-contact-ask" data-id="${c.id}" aria-label="Delete ${esc(c.name)}">Delete</button></div></div>
+  ${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}${c.phone?`<span>${esc(c.phone)}</span>`:''}
+  <div style="display:flex;gap:6px;flex-wrap:wrap">${c.lastTouch?`<span class="chip">Last touch ${fmtDate(c.lastTouch)}</span>`:''}${due}</div>${c.notes?`<div class="muted" style="font-size:12.5px">${esc(c.notes)}</div>`:''}</div>`;
+}
+VIEWS.contacts=()=>{
+  const f=ui.con;
+  const all=[...(f.scope==='hygiene'?[]:S.dental.map(s=>({kind:'dental',s}))),...(f.scope==='dental'?[]:S.hygiene.map(s=>({kind:'hygiene',s})))];
+  const q=f.q.toLowerCase();
+  const list=all.filter(({kind,s})=>{
+    if(f.dental&&!(kind==='dental'&&s.id===f.dental))return false; if(f.hyg&&!(kind==='hygiene'&&s.id===f.hyg))return false;
+    if(f.rec&&s.recruiter!==f.rec)return false; if(f.state&&stateOf(kind,s)!==f.state)return false;
+    const cons=S.contacts.filter(c=>c.kind===kind&&c.schoolId===s.id);
+    if(f.show==='with'&&!cons.length)return false; if(f.show==='without'&&cons.length)return false;
+    if(q&&!(s.name+' '+(s.loc||s.state||'')+' '+cons.map(c=>c.name+' '+(c.email||'')+' '+(c.title||'')).join(' ')).toLowerCase().includes(q))return false;
+    return true});
+  const shown=list.slice(0,f.limit);
+  const card=({kind,s})=>{const cons=S.contacts.filter(c=>c.kind===kind&&c.schoolId===s.id);const t=sTarget(kind,s);
+    return `<article class="card ${kind==='hygiene'?'hyg':''}"><div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between"><div><h3>${esc(s.name)}</h3><div class="loc">${esc(kind==='dental'?s.loc:s.state)}</div></div><span class="chip info" style="flex:none">${esc(recName(s.recruiter).split(' ')[0])}</span></div>
+    <div class="stats"><div><b>${s.hires} / ${t}</b><span>Hires / goal</span></div><div><b>${evFor(kind,s.id).length}</b><span>Events</span></div><div><b>${trFor(kind,s.id).length}</b><span>Transfers</span></div><div><b>${kind==='dental'?money(s.budget):(s.classSize??'\u2013')}</b><span>${kind==='dental'?'Budget':'Class size'}</span></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><b>Contacts (${cons.length})</b><button class="btn sm" data-act="add-contact" data-kind="${kind}" data-sid="${s.id}">Add contact</button></div>
+    ${cons.length?cons.map(contactRow).join(''):'<div class="muted" style="font-size:12.5px">No contacts yet. Add the people you work with at this school.</div>'}
+    <label class="fld"><span>Notes</span><textarea class="cn" data-sf="notes" data-kind="${kind}" data-sid="${s.id}" placeholder="What should the next recruiter know about this school?">${esc(s.notes||'')}</textarea></label>
+    <button class="btn sm" data-act="open-school" data-kind="${kind}" data-sid="${s.id}">Open full profile</button></article>`};
+  const states=Object.keys(STATES);
+  return head('School contacts',`${list.length} school${list.length===1?'':'s'} \u00b7 ${S.contacts.length} contact${S.contacts.length===1?'':'s'} on file. Add, edit, and track follow-ups on each card.`,'')+
+  `<div class="filters">${seg('con.scope',[['all','All schools'],['dental','Dental'],['hygiene','Hygiene']],f.scope)}${search('con.q',f.q,'Search school, contact, or email')}${sel('con.show',[['all','All schools'],['with','With contacts'],['without','Needs a contact']],f.show,'Contact status')}</div>
+   <div class="filters">${sel('con.dental',[['',`All dental schools (${S.dental.length})`],...S.dental.map(s=>[s.id,s.name])],f.dental,'Dental school')}${sel('con.hyg',[['',`All hygiene schools (${S.hygiene.length})`],...S.hygiene.map(s=>[s.id,s.name])],f.hyg,'Hygiene school')}${sel('con.rec',recOpts(),f.rec,'Recruiter')}${sel('con.state',[['','All states'],...states.map(c=>[c,STATES[c]])],f.state,'State')}</div>`+
+  (shown.length?`<div class="cards">${shown.map(card).join('')}</div>`:'<div class="panel empty">No schools match these filters.</div>')+
+  (list.length>shown.length?`<div style="text-align:center;margin-top:16px"><button class="btn" data-act="more-cards">Show more (${list.length-shown.length} left)</button></div>`:'');
+};
+
+VIEWS.events=()=>{
+  const f=ui.ev,list=S.events.filter(e=>evMatches(e,f)).sort(byDate);
+  const dl=list.filter(e=>e.kind==='dental'),hl=list.filter(e=>e.kind==='hygiene');
+  const n2=e=>S.transfers.filter(t=>t.eventId===e.id).length;
+  const spend=list.reduce((a,e)=>a+spendEv(e),0),att=list.reduce((a,e)=>a+((e.status==='Held'||e.status==='Invoiced')?(+e.attendees||0):0),0),tr=list.reduce((a,e)=>a+n2(e),0);
+  const open=list.filter(e=>e.status!=='Invoiced'&&e.status!=='Cancelled').reduce((a,e)=>a+((e.actualCost!=null&&e.actualCost!==''?+e.actualCost:+e.estCost)||0),0);
+  const stSel=e=>`<select class="st st-${e.status}" data-evstatus="${e.id}" aria-label="Status for ${esc(e.name)}">${STATUSES.map(s=>`<option ${s===e.status?'selected':''}>${s}</option>`).join('')}</select>`;
+  const cost=e=>e.actualCost!=null&&e.actualCost!==''?money(e.actualCost):`<span class="muted" title="Estimate">${money(e.estCost)}</span>`;
+  const act=e=>`<td class="r" style="white-space:nowrap"><button class="btn sm" data-act="edit-event" data-id="${e.id}">Edit</button> <button class="btn sm danger" data-act="del-event-ask" data-id="${e.id}">Delete</button></td>`;
+  const dRow=e=>`<tr><td style="white-space:nowrap">${fmtDate(e.date)}</td><td><b>${esc(e.name)}</b></td><td>${esc(schoolName('dental',e.schoolId))}</td><td>${esc(recName(e.recruiter))}</td><td>${typePill(e.type)}</td><td class="r">${cost(e)}</td><td class="r">${e.attendees??'\u2013'}</td><td class="r">${e.hd??'\u2013'}</td><td class="r">${e.attendees>0&&e.actualCost?money(e.actualCost/e.attendees):'\u2013'}</td><td class="r">${n2(e)}</td><td>${stSel(e)}</td>${act(e)}</tr>`;
+  const hRow=e=>`<tr><td style="white-space:nowrap">${fmtDate(e.date)}</td><td><b>${esc(e.name)}</b></td><td>${esc(schoolName('hygiene',e.schoolId))}</td><td>${esc(recName(e.recruiter))}</td><td>${typePill(e.type)}</td><td class="r">${cost(e)}</td><td class="r">${e.attendees??'\u2013'}</td><td class="r">${n2(e)}</td><td>${stSel(e)}</td>${act(e)}</tr>`;
+  const k=(l,v)=>`<div><div class="k">${l}</div><div class="v">${v}</div></div>`;
+  return head('Events','Every event across the campus recruiting team. Filter, update status, or remove.',`<button class="btn primary" data-nav="submit">Add event</button>`)+
+  `<div class="filters">${seg('ev.scope',[['all','All schools'],['dental','Dental'],['hygiene','Hygiene']],f.scope)}${seg('ev.track',[['all','All'],['doctor','Doctor'],['hygiene','Hygiene']],f.track)}</div>
+   <div class="filters">${search('ev.q',f.q,'Search events')}${sel('ev.rec',recOpts(),f.rec,'Recruiter')}${sel('ev.dental',[['','All dental schools'],...S.dental.map(s=>[s.id,s.name])],f.dental,'Dental school')}${sel('ev.hyg',[['','All hygiene schools'],...S.hygiene.map(s=>[s.id,s.name])],f.hyg,'Hygiene school')}${sel('ev.type',[['','All types'],...Object.keys(TYPES).map(t=>[t,t])],f.type,'Type')}${sel('ev.status',[['','All statuses'],...STATUSES.map(t=>[t,t])],f.status,'Status')}</div>
+   <div class="panel kpis">${k('Events shown',list.length)+k('Open (estimated)',money(open))+k('Spend (invoiced)',money(spend))+k('Attendees',att)+k('2:1 transfers',tr)}</div>`+
+  `<div class="sec">Dental events (${dl.length})</div><div class="panel tw"><table><thead><tr><th>Date</th><th>Event</th><th>Dental school</th><th>Recruiter</th><th>Type</th><th class="r">Cost</th><th class="r">Attend.</th><th class="r" title="Heartland doctors who attended">HD attend.</th><th class="r">$/att.</th><th class="r">2:1</th><th>Status</th><th></th></tr></thead><tbody>${dl.map(dRow).join('')||'<tr><td colspan="12" class="empty">No dental events match. <button class="link" data-nav="submit">Add an event</button></td></tr>'}</tbody></table></div>`+
+  `<div class="sec">Hygiene events (${hl.length})</div><div class="panel tw"><table><thead><tr><th>Date</th><th>Event</th><th>Hygiene school</th><th>Recruiter</th><th>Type</th><th class="r">Cost</th><th class="r">Attend.</th><th class="r">2:1</th><th>Status</th><th></th></tr></thead><tbody>${hl.map(hRow).join('')||'<tr><td colspan="10" class="empty">No hygiene events match.</td></tr>'}</tbody></table></div>`;
+};
+
+VIEWS.transfers=()=>{
+  const f=ui.tr,list=S.transfers.filter(t=>trMatches(t,f));
+  const years=[...new Set(S.transfers.map(t=>t.gradYear).filter(Boolean))].sort();
+  const row=t=>{const ev=S.events.find(e=>e.id===t.eventId);return `<tr><td><b>${esc(t.candidate)}</b></td><td>${t.email?`<a href="mailto:${esc(t.email)}">${esc(t.email)}</a>`:''}</td><td>${esc(schoolName(t.kind,t.schoolId))}</td><td>${esc(recName(t.recruiter))}</td><td>${esc(t.gradYear||'')}</td><td>${esc(t.to||'')}</td><td>${ev?esc(ev.name):'<span class="muted">\u2013</span>'}</td><td style="max-width:220px">${esc(t.notes||'')}</td><td class="r" style="white-space:nowrap"><button class="btn sm" data-act="edit-transfer" data-id="${t.id}">Edit</button> <button class="btn sm danger" data-act="del-transfer-ask" data-id="${t.id}">Delete</button></td></tr>`};
+  const tbl=(kind,label)=>{const l=list.filter(t=>t.kind===kind);return `<div class="sec">${label} transfers (${l.length})</div><div class="panel tw"><table><thead><tr><th>Candidate</th><th>Email</th><th>${label} school</th><th>Recruiter</th><th>Grad year</th><th>Transferred to</th><th>Event</th><th>Notes</th><th></th></tr></thead><tbody>${l.map(row).join('')||`<tr><td colspan="9" class="empty">No ${label.toLowerCase()} transfers yet.</td></tr>`}</tbody></table></div>`};
+  return head('2:1 transfers','Candidates met at campus events and handed to office-side recruiters for placement.',`<button class="btn primary" data-act="add-transfer" data-kind="dental">Add dental transfer</button><button class="btn" data-act="add-transfer" data-kind="hygiene">Add hygiene transfer</button>`)+
+  `<div class="filters">${seg('tr.scope',[['all','All schools'],['dental','Dental'],['hygiene','Hygiene']],f.scope)}${seg('tr.track',[['all','All'],['doctor','Doctor'],['hygiene','Hygiene']],f.track)}</div>
+   <div class="filters">${search('tr.q',f.q,'Search candidate')}${sel('tr.rec',recOpts(),f.rec,'Recruiter')}${sel('tr.dental',[['','All dental schools'],...S.dental.map(s=>[s.id,s.name])],f.dental,'Dental school')}${sel('tr.hyg',[['','All hygiene schools'],...S.hygiene.map(s=>[s.id,s.name])],f.hyg,'Hygiene school')}${sel('tr.year',[['','All grad years'],...years.map(y=>[y,y])],f.year,'Grad year')}</div>`+
+  (f.scope!=='hygiene'?tbl('dental','Dental'):'')+(f.scope!=='dental'?tbl('hygiene','Hygiene'):'');
+};
+
+function eventFormHtml(e,mode){
+  const kind=e.kind||'dental';
+  const edit=mode==='edit';
+  return `<form class="form" data-form="${edit?'event-edit':'event-new'}" autocomplete="off">
+   ${edit?`<input type="hidden" name="id" value="${e.id}">`:''}
+   <div class="full"><div class="fld"><span>School type *</span>${kindSeg(kind)}</div></div>
+   ${field('Event name *',`<input name="name" required value="${esc(e.name||'')}" placeholder="e.g., D4 contracts lunch & learn">`,'full')}
+   ${field('School *',`<select name="schoolId" required>${schoolOptsHtml(kind,e.schoolId)}</select>`)}
+   ${field('Recruiter *',`<select name="recruiter" required>${recOptsHtml(e.recruiter)}</select>`)}
+   ${field('Event date *',`<input type="date" name="date" required value="${esc(e.date||'')}">`)}
+   ${field('Event type *',`<select name="type">${Object.keys(TYPES).map(t=>`<option ${t===(e.type||'Lunch and Learn')?'selected':''}>${t}</option>`).join('')}</select>`)}
+   ${field('Format',`<select name="format">${FORMATS.map(f=>`<option ${f===(e.format||'In-person')?'selected':''}>${f}</option>`).join('')}</select>`)}
+   ${field('Estimated cost ($)',`<input type="number" min="0" step="1" name="estCost" value="${e.estCost??''}" placeholder="e.g., 1500">`)}
+   ${field('Attendee goal',`<input type="number" min="0" step="1" name="goal" value="${e.goal??''}" placeholder="e.g., 50">`)}
+   ${edit?`<div class="full sec" style="margin:6px 0 0">After the event</div>
+   ${field('Status',`<select name="status">${STATUSES.map(s=>`<option ${s===e.status?'selected':''}>${s}</option>`).join('')}</select>`)}
+   ${field('Actual cost ($)',`<input type="number" min="0" step="0.01" name="actualCost" value="${e.actualCost??''}">`)}
+   ${field('Attendees',`<input type="number" min="0" name="attendees" value="${e.attendees??''}">`)}
+   ${field('Leads captured',`<input type="number" min="0" name="leads" value="${e.leads??''}">`)}
+   ${field('Heartland doctors who attended',`<input type="number" min="0" name="hd" value="${e.hd??''}">`)}
+   ${field('What worked, what to change',`<textarea name="wrap">${esc(e.wrap||'')}</textarea>`,'full')}`:''}
+   ${field('Notes',`<textarea name="notes" placeholder="Sponsorship details, contact people, focus group topics…">${esc(e.notes||'')}</textarea>`,'full')}
+   <div class="formfoot"><span class="muted" style="font-size:12px">${edit?'Mark an event Invoiced once the bill is final. Only invoiced events count as spend.':'Fields marked * are required. Add cost and attendance after the event.'}</span><span style="display:flex;gap:8px"><button type="button" class="btn" data-act="${edit?'close':'reset-form'}">${edit?'Cancel':'Reset'}</button><button class="btn primary" type="submit">${edit?'Save changes':'Add event'}</button></span></div></form>`;
+}
+VIEWS.submit=()=>head('Add an event','Fill out the details and it lands on the shared calendar and Events list for the whole team.','')+`<div class="panel pad" style="max-width:760px">${eventFormHtml({kind:ui.sub.type,date:ui.sub.date},'new')}</div>`;
+
+VIEWS.resources=()=>{
+  const cats=[...new Set(S.resources.map(r=>r.cat||'General'))].sort();
+  return head('Resources','Playbooks, templates, vendor contacts, and brand assets the team uses.','')+
+  `<div class="panel pad" style="margin-bottom:16px"><form class="form" data-form="resource" style="grid-template-columns:1.2fr 1.6fr 1fr auto;align-items:end">${field('Title *','<input name="title" required placeholder="e.g., Lunch & learn checklist">')}${field('Link *','<input name="url" required placeholder="https://\u2026 or SharePoint link">')}${field('Category','<input name="cat" list="rcats" placeholder="e.g., Templates"><datalist id="rcats">'+cats.map(c=>`<option value="${esc(c)}">`).join('')+'</datalist>')}<button class="btn primary" type="submit">Add resource</button></form></div>`+
+  (S.resources.length?cats.map(c=>`<div class="sec">${esc(c)}</div><div class="panel pad"><ul class="rows res">${S.resources.filter(r=>(r.cat||'General')===c).map(r=>`<li style="cursor:default"><div class="grow"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a><span class="muted">${esc(r.url)}</span></div><button class="btn sm danger" data-act="del-resource" data-id="${r.id}">Remove</button></li>`).join('')}</ul></div>`).join(''):'<div class="panel empty">No resources yet. Add the first link above.</div>');
+};
+
+VIEWS.archives=()=>{
+  return head('Archives & data','Closed-out cycles live here. You can also back up the playbook and export tables for your Excel dashboard.',`<button class="btn primary" data-act="archive-ask">Archive current data</button>`)+
+  (S.archives.length?`<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(340px,1fr))">${S.archives.map(a=>`<article class="card"><div><h3>${esc(a.label)}</h3><div class="loc">Archived ${fmtDate(a.date)}</div></div><div class="stats"><div><b>${a.t.hires}</b><span>Hires</span></div><div><b>${a.events.length}</b><span>Events</span></div><div><b>${a.transfers.length}</b><span>Transfers</span></div><div><b>${money(a.t.spend)}</b><span>Spend</span></div></div><div style="display:flex;gap:8px"><button class="btn sm" data-act="view-archive" data-id="${a.id}">View details</button><button class="btn sm" data-act="export-archive" data-id="${a.id}">Export events</button><button class="btn sm danger" data-act="del-archive-ask" data-id="${a.id}">Delete</button></div></article>`).join('')}</div>`:'<div class="panel empty">No archives yet. Use Archive current data on the dashboard when a cycle ends.</div>')+
+  `<div class="sec">Data & backup</div><section class="panel pad"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+   <div><h2 style="font-size:15px">Export for your dashboard</h2><p class="muted">Flat tables with one row per event, transfer, and school. Point Excel or Power BI at these.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" data-act="export" data-what="events">Events</button><button class="btn sm" data-act="export" data-what="transfers">Transfers</button><button class="btn sm" data-act="export" data-what="schools">Schools</button><button class="btn sm" data-act="export" data-what="contacts">Contacts</button></div></div>
+   <div><h2 style="font-size:15px">Campus Recruiting Dashboard</h2><p class="muted">${DASH?`Linked: ${DASH.schools.length} schools, ${DASH.events.length} events. ${dashUnmapped()} Playbook school${dashUnmapped()===1?' is':'s are'} not matched yet.`:'Not linked. Link it once so school names match exactly.'}</p><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" data-act="dash-link-open">${DASH?'Re-link dashboard data':'Link dashboard data'}</button>${DASH&&dashUnmapped()?`<button class="btn sm" data-act="dash-review">Review ${dashUnmapped()} unmatched</button>`:''}${DASH?'<button class="btn sm primary" data-act="dash-export">Export updated dashboard file</button>':''}<button class="btn sm" data-act="dash-csv">Events as dashboard rows (CSV)</button></div></div>
+   <div><h2 style="font-size:15px">Backup & restore</h2><p class="muted">Download everything as one file, or restore from one.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" data-act="export" data-what="backup">Back up</button><button class="btn sm" data-act="restore-open">Restore from file</button></div></div>
+   <div><h2 style="font-size:15px">Reset</h2><p class="muted">Return to the starting school list and clear all events, contacts, and archives.</p><button class="btn sm danger" data-act="reset-ask">Reset playbook</button></div></div></section>`;
+};
+
+/* ---------- drawer (school profile) ---------- */
+function openDrawer(){modal(drawerHtml(),true)}
+function drawerHtml(){
+  const {kind,id}=ui.drawer;const s=getSchool(kind,id);if(!s)return '<p>School not found.</p>';
+  const evs=evFor(kind,id).sort(byDate),trs=trFor(kind,id),cons=S.contacts.filter(c=>c.kind===kind&&c.schoolId===id);
+  const num=(f,label,v)=>field(label,`<input type="number" min="0" data-sf="${f}" data-num="1" data-kind="${kind}" data-sid="${id}" value="${v??''}">`);
+  const t=sTarget(kind,s);
+  return `<button class="btn sm x" data-act="close">Close</button><h2>${esc(s.name)}</h2><div class="muted">${esc(kind==='dental'?s.loc:s.state)} \u00b7 ${kind==='dental'?'Dental school':'Hygiene school'}</div>
+  <div class="form" style="margin:16px 0">
+   ${field('Recruiter',`<select data-sf="recruiter" data-kind="${kind}" data-sid="${id}">${recOptsHtml(s.recruiter)}</select>`)}
+   ${num('hires','Hires this year',s.hires)}
+   ${DASH?field('Name in the Campus Recruiting Dashboard',`<input data-sf="dashName" data-kind="${kind}" data-sid="${id}" list="dashnames" value="${esc(s.dashName||'')}" placeholder="Type to match a dashboard school"><datalist id="dashnames">${DASH.schools.filter(x=>x.segment===(kind==='dental'?'Dental':'Hygiene')).map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist>`,'full'):''}
+   ${kind==='dental'?num('target','Hire target',s.target)+num('budget','Event budget ($)',s.budget):num('goal','Hire goal',s.goal)+num('classSize','Class size',s.classSize)+field('Support level',`<select data-sf="support" data-kind="${kind}" data-sid="${id}">${SUPPORT.map(x=>`<option ${x===s.support?'selected':''}>${x}</option>`).join('')}</select>`)+num('budget','Event budget ($)',s.budget)}
+  </div>
+  <div class="panel kpis" style="grid-template-columns:repeat(4,1fr)"><div><div class="k">Attainment</div><div class="v">${pctOf(s.hires,t)}%</div></div><div><div class="k">Events</div><div class="v">${evs.length}</div></div><div><div class="k">2:1 transfers</div><div class="v">${trs.length}</div></div><div><div class="k">Spend (invoiced)</div><div class="v">${money(schoolSpend(kind,id))}</div></div></div>
+  <div class="sec" style="justify-content:space-between">Contacts (${cons.length})<button class="btn sm" data-act="add-contact" data-kind="${kind}" data-sid="${id}">Add contact</button></div>
+  <div style="display:grid;gap:8px">${cons.map(contactRow).join('')||'<div class="muted">No contacts yet.</div>'}</div>
+  <div class="sec">Notes</div><textarea data-sf="notes" data-kind="${kind}" data-sid="${id}" placeholder="What should the next recruiter know about this school?">${esc(s.notes||'')}</textarea>
+  <div class="sec" style="justify-content:space-between">Events (${evs.length})<button class="btn sm" data-act="new-for-school" data-kind="${kind}" data-sid="${id}">Add event</button></div>
+  ${evs.length?`<ul class="rows">${evs.map(e=>`<li data-act="edit-event" data-id="${e.id}"><div class="dt"><b>${parseISO(e.date).getDate()}</b><span>${MONTHS[parseISO(e.date).getMonth()].slice(0,3)}</span></div><div class="grow"><b>${esc(e.name)}</b><span class="muted">${esc(recName(e.recruiter))}</span></div>${typePill(e.type)}<span class="chip">${e.status}</span></li>`).join('')}</ul>`:'<div class="muted">No events yet.</div>'}
+  <div class="formfoot" style="display:flex;justify-content:space-between"><button class="btn sm danger" data-act="del-school-ask" data-kind="${kind}" data-sid="${id}">Remove school</button><button class="btn primary" data-act="close">Done</button></div>`;
+}
+
+/* ---------- other forms ---------- */
+function contactForm(c){
+  return `<form class="form" data-form="contact"><h2 class="full">${c.id?'Edit contact':'Add contact'}</h2><div class="full muted" style="margin-top:-8px">${esc(schoolName(c.kind,c.schoolId))}</div>
+  <input type="hidden" name="id" value="${c.id||''}"><input type="hidden" name="kind" value="${c.kind}"><input type="hidden" name="schoolId" value="${c.schoolId}">
+  ${field('Name *',`<input name="name" required value="${esc(c.name||'')}" autofocus>`)}${field('Title',`<input name="title" value="${esc(c.title||'')}" placeholder="e.g., Associate Dean, Student Affairs">`)}
+  ${field('Email',`<input type="email" name="email" value="${esc(c.email||'')}">`)}${field('Phone',`<input name="phone" value="${esc(c.phone||'')}">`)}
+  ${field('Last touch',`<input type="date" name="lastTouch" value="${esc(c.lastTouch||'')}">`)}${field('Follow up by',`<input type="date" name="followUp" value="${esc(c.followUp||'')}">`)}
+  ${field('Notes',`<textarea name="notes" placeholder="How you met, what they care about, next step\u2026">${esc(c.notes||'')}</textarea>`,'full')}
+  <div class="formfoot"><span></span><span style="display:flex;gap:8px"><button type="button" class="btn" data-act="drawer-back">Cancel</button><button class="btn primary" type="submit">Save contact</button></span></div></form>`;
+}
+function transferForm(t){
+  const kind=t.kind||'dental',Y=CY;
+  const events=S.events.filter(e=>e.kind===kind&&(!t.schoolId||e.schoolId===t.schoolId)).sort(byDate);
+  return `<form class="form" data-form="transfer"><h2 class="full">${t.id?'Edit 2:1 transfer':'Add 2:1 transfer'}</h2><input type="hidden" name="id" value="${t.id||''}">
+  <div class="full"><div class="fld"><span>School type</span>${kindSeg(kind)}</div></div>
+  ${field('Candidate *',`<input name="candidate" required value="${esc(t.candidate||'')}" autofocus>`)}${field('Email',`<input type="email" name="email" value="${esc(t.email||'')}">`)}
+  ${field('School *',`<select name="schoolId" required>${schoolOptsHtml(kind,t.schoolId)}</select>`)}${field('Campus recruiter *',`<select name="recruiter" required>${recOptsHtml(t.recruiter)}</select>`)}
+  ${field('Grad year',`<select name="gradYear">${[Y-1,Y,Y+1,Y+2,Y+3,Y+4].map(y=>`<option ${String(y)===String(t.gradYear||Y)?'selected':''}>${y}</option>`).join('')}</select>`)}${field('Transferred to (office-side recruiter)',`<input name="to" value="${esc(t.to||'')}">`)}
+  ${field('Event where you met',`<select name="eventId"><option value="">None</option>${S.events.filter(e=>e.kind===kind).sort(byDate).map(e=>`<option value="${e.id}" ${e.id===t.eventId?'selected':''}>${esc(fmtDate(e.date)+' \u2013 '+e.name)}</option>`).join('')}</select>`,'full')}
+  ${field('Notes',`<textarea name="notes" placeholder="Practice preferences, location, timing\u2026">${esc(t.notes||'')}</textarea>`,'full')}
+  <div class="formfoot"><span></span><span style="display:flex;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Save transfer</button></span></div></form>`;
+}
+function schoolForm(kind){
+  return `<form class="form" data-form="school"><h2 class="full">Add ${kind==='dental'?'dental':'hygiene'} school</h2><input type="hidden" name="kind" value="${kind}">
+  ${field('School name *','<input name="name" required autofocus>','full')}
+  ${kind==='dental'?field('City, state *','<input name="loc" required placeholder="e.g., Tampa, FL">')+field('Recruiter',`<select name="recruiter">${recOptsHtml('')}</select>`)+field('Hire target','<input type="number" min="0" name="target" value="0">')+field('Event budget ($)','<input type="number" min="0" name="budget" value="0">'):
+   field('State *',`<select name="state" required><option value="">Select\u2026</option>${Object.values(STATES).map(s=>`<option>${s}</option>`).join('')}</select>`)+field('Recruiter',`<select name="recruiter">${recOptsHtml('')}</select>`)+field('Class size','<input type="number" min="0" name="classSize">')+field('Hire goal','<input type="number" min="0" name="goal">')+field('Support level',`<select name="support">${SUPPORT.map(x=>`<option>${x}</option>`).join('')}</select>`)}
+  <div class="formfoot"><span></span><span style="display:flex;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Add school</button></span></div></form>`;
+}
+function teamForm(){
+  return `<form data-form="team"><h2>Budgets & targets</h2><p class="muted">Annual event budget and hire target for each recruiter. These feed the dashboard.</p><div class="tw"><table><thead><tr><th>Recruiter</th><th>Track</th><th class="r">Budget ($)</th><th class="r">Hire target</th></tr></thead><tbody>${S.recruiters.map(r=>`<tr><td><input name="n_${r.id}" value="${esc(r.name)}" style="width:170px"></td><td><span class="tag ${r.track}" style="margin:0">${r.track}</span></td><td class="r"><input type="number" min="0" name="b_${r.id}" value="${r.budget}" style="width:120px;text-align:right"></td><td class="r"><input type="number" min="0" name="t_${r.id}" value="${r.target}" style="width:90px;text-align:right"></td></tr>`).join('')}</tbody></table></div><div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Save</button></div></form>`;
+}
+function importForm(kind){
+  const tpl=kind==='dental'?'name,location,recruiter,target,budget':'name,state,recruiter,class_size,hire_goal,support_level';
+  return `<form data-form="import-schools"><h2>Import ${kind} schools</h2><p class="muted">Paste CSV rows or choose a file. Columns: <code>${tpl}</code>. Recruiter can be a first name or full name. Schools already on the list are skipped.</p><input type="hidden" name="kind" value="${kind}"><input type="file" accept=".csv,text/csv" id="csvfile" style="margin-bottom:8px"><textarea name="csv" id="csvtext" style="min-height:160px" placeholder="${tpl}"></textarea><div class="formfoot" style="display:flex;justify-content:space-between"><button type="button" class="link" data-act="csv-template" data-kind="${kind}">Download template</button><span style="display:flex;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Import schools</button></span></div></form>`;
+}
+
+/* ---------- render ---------- */
+function navHtml(){
+  const due=followUpsDue(7).length;
+  return `<div class="brand"><img src="${LOGO}" alt="Heartland Dental"><div><b>Campus Playbook</b><span>Recruiting team \u00b7 CY ${CY}</span></div></div><nav>${NAV.map(([id,l])=>`<button class="nv ${ui.view===id?'on':''}" data-nav="${id}" ${ui.view===id?'aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true">${IC[id]}</svg>${l}${id==='contacts'&&due?`<span class="cnt" title="Follow-ups due within 7 days">${due}</span>`:''}</button>`).join('')}</nav><div class="savestate">${esc(saveMsg)}</div>`;
+}
+function render(){
+  if(!S)return;
+  const a=document.activeElement,aid=a&&a.id,ss=a&&a.selectionStart,y=window.scrollY;
+  $('#nav').innerHTML=navHtml();
+  $('#main').innerHTML=VIEWS[ui.view]();
+  window.scrollTo(0,y);
+  if(aid){const el=document.getElementById(aid);if(el){el.focus();try{el.setSelectionRange(ss,ss)}catch(e){}}}
+}
+const go=v=>{ui.view=v;window.scrollTo(0,0);render()};
+const commit=fn=>{fn();persist();render()};
+
+/* ---------- dashboard link ---------- */
+const normName=n=>String(n||'').toLowerCase().replace(/\(.*?\)/g,'').replace(/&/g,'and').replace(/[^a-z0-9]/g,'');
+const dashUnmapped=()=>S.dental.concat(S.hygiene).filter(s=>!s.dashName).length;
+function linkDashboard(d){
+  if(!d||!d.schools||!d.events||!d.budget||!d.grads||!d.settings)throw new Error('missing sections');
+  DASH=d;
+  let matched=0,added=0;
+  [['dental','Dental'],['hygiene','Hygiene']].forEach(([kind,seg])=>{
+    const list=S[kind],pool=d.schools.filter(x=>x.segment===seg),byNorm=new Map(pool.map(x=>[normName(x.name),x]));
+    const used=new Set();
+    list.forEach(s=>{if(s.dashName&&pool.some(x=>x.name===s.dashName)){used.add(s.dashName);return}
+      const n=normName(s.name);let m=byNorm.get(n);
+      if(!m)m=pool.find(x=>{const k=normName(x.name);return !used.has(x.name)&&k.length>12&&n.length>12&&(k.startsWith(n)||n.startsWith(k))});
+      if(m){s.dashName=m.name;used.add(m.name);matched++}});
+    pool.forEach(x=>{if(used.has(x.name))return;
+      const grads=d.grads.filter(g=>g.school===x.name&&g.grads!=='').sort((a,b)=>b.year-a.year)[0];
+      const bud=d.budget.filter(b=>b.school===x.name&&b.planned!=='').sort((a,b)=>b.year-a.year)[0];
+      const base={id:(kind==='dental'?'d':'h')+uid(),name:x.name,dashName:x.name,recruiter:'',hires:0,notes:'',budget:bud?+bud.planned:0};
+      list.push(kind==='dental'?{...base,loc:x.state||'',state:x.state||'',target:0}:{...base,state:x.state||'',classSize:grads?+grads.grads:null,goal:null,support:'Strategic'});added++});
+    list.sort((a,b)=>a.name.localeCompare(b.name));
+  });
+  saveDash();persist();return {matched,added};
+}
+const dashRows=(statuses=['Held','Invoiced'])=>{
+  const all=S.events.concat(...S.archives.map(a=>a.events.map(e=>({...e,_arch:a.names[e.kind+e.schoolId]}))));
+  const trs=S.transfers.concat(...S.archives.map(a=>a.transfers));
+  return all.filter(e=>statuses.includes(e.status)).map(e=>{
+    const s=getSchool(e.kind,e.schoolId);const school=(s&&(s.dashName||s.name))||e._arch||'';
+    const leads=e.leads!=null&&e.leads!==''?e.leads:'';
+    return {date:e.date,school,type:e.type,format:e.format||'In-person',cost:e.actualCost!=null&&e.actualCost!==''?+e.actualCost:'',attendees:e.attendees!=null?+e.attendees:0,leads:leads===''?'':+leads,apps:'',hires:'',notes:e.name+(e.notes?' \u2013 '+e.notes:''),year:'',season:'',pbId:e.id,_mapped:!!(s&&s.dashName)};
+  }).sort(byDate);
+};
+
+/* ---------- actions ---------- */
+function totalsSnapshot(){const D=dashData({scope:'all',rec:'',dental:'',hyg:'',type:''});return {hires:D.hires,target:D.target,budget:D.budget,spend:D.spend,held:D.held.length,attendees:D.attendees}}
+function exportData(what){
+  const sn=(k,id)=>schoolName(k,id);
+  if(what==='events')return dataModal('Events export','events.csv',toCSV([['Event ID','Date','Event','School type','School','Recruiter','Event type','Status','Estimated cost','Actual cost','Attendees','HD attendees','2:1 transfers','Notes'],...S.events.sort(byDate).map(e=>[e.id,e.date,e.name,e.kind,sn(e.kind,e.schoolId),recName(e.recruiter),e.type,e.status,e.estCost,e.actualCost,e.attendees,e.hd,S.transfers.filter(t=>t.eventId===e.id).length,e.notes])]),'text/csv','One row per event.');
+  if(what==='transfers')return dataModal('Transfers export','transfers.csv',toCSV([['Candidate','Email','School type','School','Campus recruiter','Grad year','Transferred to','Event','Notes'],...S.transfers.map(t=>{const ev=S.events.find(e=>e.id===t.eventId);return [t.candidate,t.email,t.kind,sn(t.kind,t.schoolId),recName(t.recruiter),t.gradYear,t.to,ev?ev.name:'',t.notes]})]),'text/csv','One row per candidate.');
+  if(what==='contacts')return dataModal('Contacts export','contacts.csv',toCSV([['Name','Title','Email','Phone','School type','School','Last touch','Follow up by','Notes'],...S.contacts.map(c=>[c.name,c.title,c.email,c.phone,c.kind,sn(c.kind,c.schoolId),c.lastTouch,c.followUp,c.notes])]),'text/csv','One row per contact.');
+  if(what==='schools')return dataModal('Schools export','schools.csv',toCSV([['School type','School','Location or state','Recruiter','Hire target or goal','Hires','Budget','Class size','Support level','Events','Transfers','Invoiced spend'],...S.dental.map(s=>['dental',s.name,s.loc,recName(s.recruiter),s.target,s.hires,s.budget,'','',evFor('dental',s.id).length,trFor('dental',s.id).length,schoolSpend('dental',s.id)]),...S.hygiene.map(s=>['hygiene',s.name,s.state,recName(s.recruiter),s.goal,s.hires,s.budget,s.classSize,s.support,evFor('hygiene',s.id).length,trFor('hygiene',s.id).length,schoolSpend('hygiene',s.id)])]),'text/csv','One row per school.');
+  if(what==='backup')return dataModal('Backup','campus-playbook-backup.json',JSON.stringify(S),'application/json','Keep this file somewhere safe. Restore it from Archives & data.');
+}
+function downloadBuf(){
+  try{const b=new Blob([dataBuf.text],{type:dataBuf.mime});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=dataBuf.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Download started')}catch(e){toast('Download blocked here. Use Copy instead.')}
+}
+function copyBuf(){const ta=$('#databuf');const done=()=>toast('Copied');
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(dataBuf.text).then(done,()=>{ta.select();document.execCommand('copy');done()});else{ta.select();document.execCommand('copy');done()}}
+
+function resolveRec(v){v=(v||'').trim().toLowerCase();if(!v)return '';const r=S.recruiters.find(r=>r.id===v||r.name.toLowerCase()===v||r.name.toLowerCase().split(' ')[0]===v);return r?r.id:''}
+function importSchools(kind,text){
+  const rows=parseCSV(text);if(rows.length<2)return toast('Add a header row and at least one school.');
+  const h=rows[0].map(x=>x.trim().toLowerCase().replace(/[\s-]+/g,'_'));const col=n=>h.indexOf(n);
+  const list=kind==='dental'?S.dental:S.hygiene;const have=new Set(list.map(s=>s.name.toLowerCase()));let add=0,skip=0;
+  rows.slice(1).forEach(r=>{const name=(r[col('name')]||'').trim();if(!name||have.has(name.toLowerCase())){skip++;return}
+    have.add(name.toLowerCase());const g=n=>col(n)>=0?(r[col(n)]||'').trim():'';
+    if(kind==='dental')S.dental.push({id:'d'+uid(),name,loc:g('location'),recruiter:resolveRec(g('recruiter')),target:+g('target')||0,budget:+g('budget')||0,hires:0,notes:''});
+    else{const st=g('state');S.hygiene.push({id:'h'+uid(),name,state:NAME2CODE[st.toLowerCase()]?STATES[NAME2CODE[st.toLowerCase()]]:(STATES[st.toUpperCase()]||st),recruiter:resolveRec(g('recruiter')),classSize:nn(g('class_size')),goal:nn(g('hire_goal')),support:SUPPORT.includes(g('support_level'))?g('support_level'):'Strategic',hires:0,budget:0,notes:''})}
+    add++});
+  list.sort((a,b)=>a.name.localeCompare(b.name));
+  persist();closeModal();render();toast(`Added ${add} school${add===1?'':'s'}${skip?`, skipped ${skip}`:''}`);
+}
+
+document.addEventListener('click',e=>{
+  const sc=e.target.closest('[data-scrim]');if(sc&&e.target===sc){closeModal();return}
+  const n=e.target.closest('[data-nav]');if(n){closeModal();go(n.dataset.nav);return}
+  const st=e.target.closest('[data-set]');if(st){setPath(ui,st.dataset.set,st.dataset.val);render();return}
+  const el=e.target.closest('[data-act]');if(!el)return;const d=el.dataset,a=d.act;
+  switch(a){
+    case 'close':closeModal();break;
+    case 'drawer-back':backFromForm();break;
+    case 'mix':ui.dash.type=ui.dash.type===d.type?'':d.type;render();break;
+    case 'cal-prev':ui.cal.m--;if(ui.cal.m<0){ui.cal.m=11;ui.cal.y--}render();break;
+    case 'cal-next':ui.cal.m++;if(ui.cal.m>11){ui.cal.m=0;ui.cal.y++}render();break;
+    case 'cal-today':{const t=new Date();ui.cal.y=t.getFullYear();ui.cal.m=t.getMonth();render();break}
+    case 'new-on':ui.sub={type:'dental',date:d.date};go('submit');break;
+    case 'new-for-school':closeModal();ui.sub={type:d.kind,date:''};go('submit');setTimeout(()=>{const f=document.querySelector('form[data-form=event-new]');if(f){f.schoolId.value=d.sid;const s=getSchool(d.kind,d.sid);if(s&&s.recruiter)f.recruiter.value=s.recruiter}},0);break;
+    case 'reset-form':{const f=document.querySelector('form[data-form=event-new]');if(f)f.reset();ui.sub={type:'dental',date:''};render();break}
+    case 'open-school':ui.drawer={kind:d.kind,id:d.sid};openDrawer();break;
+    case 'more-cards':ui.con.limit+=48;render();break;
+    case 'edit-event':{const ev=S.events.find(x=>x.id===d.id);if(ev){ui.drawer=null;modal(eventFormHtml(ev,'edit'),false)}break}
+    case 'del-event-ask':confirmModal('This removes the event from the calendar and from the dashboard totals.','del-event',d.id);break;
+    case 'del-event':commit(()=>{S.events=S.events.filter(x=>x.id!==d.id);S.transfers.forEach(t=>{if(t.eventId===d.id)t.eventId=''})});closeModal();toast('Event deleted');break;
+    case 'add-contact':ui.drawer=ui.drawer||null;modal(contactForm({kind:d.kind,schoolId:d.sid}));break;
+    case 'edit-contact':{const c=S.contacts.find(x=>x.id===d.id);if(c)modal(contactForm(c));break}
+    case 'del-contact-ask':confirmModal('Delete this contact from the school card?','del-contact',d.id);break;
+    case 'del-contact':commit(()=>{S.contacts=S.contacts.filter(x=>x.id!==d.id)});if(ui.drawer)openDrawer();else closeModal();toast('Contact deleted');break;
+    case 'add-transfer':modal(transferForm({kind:d.kind}));break;
+    case 'edit-transfer':{const t=S.transfers.find(x=>x.id===d.id);if(t)modal(transferForm(t));break}
+    case 'del-transfer-ask':confirmModal('Delete this 2:1 transfer?','del-transfer',d.id);break;
+    case 'del-transfer':commit(()=>{S.transfers=S.transfers.filter(x=>x.id!==d.id)});closeModal();toast('Transfer deleted');break;
+    case 'add-school':modal(schoolForm(d.kind));break;
+    case 'del-school-ask':confirmModal('Remove this school? Its events, transfers, and contacts will be removed too.','del-school',d.sid+'|'+d.kind,'Remove school');break;
+    case 'del-school':{const [sid,kind]=d.id.split('|');commit(()=>{const k=kind;S[k==='dental'?'dental':'hygiene']=S[k==='dental'?'dental':'hygiene'].filter(s=>s.id!==sid);S.events=S.events.filter(x=>!(x.kind===k&&x.schoolId===sid));S.transfers=S.transfers.filter(x=>!(x.kind===k&&x.schoolId===sid));S.contacts=S.contacts.filter(x=>!(x.kind===k&&x.schoolId===sid))});closeModal();toast('School removed');break}
+    case 'import-schools':modal(importForm(d.kind));break;
+    case 'csv-template':dataModal('CSV template',d.kind+'-schools-template.csv',d.kind==='dental'?'name,location,recruiter,target,budget\r\nExample School of Dentistry,"Tampa, FL",Sam,3,12000':'name,state,recruiter,class_size,hire_goal,support_level\r\nExample Community College,Florida,Chris,20,2,Strategic','text/csv','Fill in one school per row, then paste the rows into the import box.');break;
+    case 'team-edit':modal(teamForm());break;
+    case 'archive-ask':modal(`<form data-form="archive"><h2>Archive current data</h2><p>Events, 2:1 transfers, and hire counts move into Archives and reset to zero. School contacts, notes, budgets, and targets stay in place.</p>${field('Archive name',`<input name="label" required value="CY ${CY} cycle">`)}<div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Archive and start fresh</button></div></form>`);break;
+    case 'view-archive':{const a=S.archives.find(x=>x.id===d.id);if(!a)break;modal(`<button class="btn sm x" data-act="close">Close</button><h2>${esc(a.label)}</h2><div class="muted">Archived ${fmtDate(a.date)}</div><div class="panel kpis" style="margin-top:14px"><div><div class="k">Hires</div><div class="v">${a.t.hires} / ${a.t.target}</div></div><div><div class="k">Budget</div><div class="v">${money(a.t.budget)}</div></div><div><div class="k">Spend</div><div class="v">${money(a.t.spend)}</div></div><div><div class="k">Attendees</div><div class="v">${a.t.attendees}</div></div><div><div class="k">Events held</div><div class="v">${a.t.held}</div></div></div><div class="sec">Events (${a.events.length})</div><div class="panel tw"><table><thead><tr><th>Date</th><th>Event</th><th>School</th><th class="r">Cost</th><th class="r">Attend.</th><th>Status</th></tr></thead><tbody>${a.events.sort(byDate).map(e=>`<tr><td>${fmtDate(e.date)}</td><td>${esc(e.name)}</td><td>${esc(a.names[e.kind+e.schoolId]||'')}</td><td class="r">${money(e.actualCost??e.estCost)}</td><td class="r">${e.attendees??'\u2013'}</td><td>${e.status}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">No events in this archive.</td></tr>'}</tbody></table></div><div class="sec">Schools with hires (${a.hires.length})</div><div class="panel pad">${a.hires.map(h=>`<span class="chip" style="margin:2px">${esc(h.name)} \u00b7 ${h.hires}</span>`).join('')||'<span class="muted">No hires recorded.</span>'}</div>`,true);break}
+    case 'export-archive':{const a=S.archives.find(x=>x.id===d.id);if(a)dataModal('Archive events','archive-events.csv',toCSV([['Date','Event','School type','School','Event type','Status','Estimated cost','Actual cost','Attendees'],...a.events.sort(byDate).map(e=>[e.date,e.name,e.kind,a.names[e.kind+e.schoolId],e.type,e.status,e.estCost,e.actualCost,e.attendees])]),'text/csv');break}
+    case 'del-archive-ask':confirmModal('Delete this archive permanently?','del-archive',d.id);break;
+    case 'del-archive':commit(()=>{S.archives=S.archives.filter(x=>x.id!==d.id)});closeModal();toast('Archive deleted');break;
+    case 'del-resource':commit(()=>{S.resources=S.resources.filter(x=>x.id!==d.id)});break;
+    case 'export':exportData(d.what);break;
+    case 'dash-link-open':modal(`<form data-form="dash-link"><h2>Link dashboard data</h2><p class="muted">In the Campus Recruiting Dashboard, open the Data tab and choose Export all data (JSON). Load that file here. The Playbook matches its schools to the dashboard\u2019s names and adds any schools it is missing.</p><input type="file" accept=".json,application/json" id="dashfile" style="margin-bottom:8px"><div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Link dashboard</button></div></form>`);break;
+    case 'dash-review':{const rows=[];[['dental','Dental'],['hygiene','Hygiene']].forEach(([kind,seg])=>S[kind].filter(s=>!s.dashName).forEach(s=>{
+        const spare=S[kind].filter(x=>x!==s&&x.dashName&&!x.recruiter&&!x.hires&&!x.notes&&!evFor(kind,x.id).length&&!trFor(kind,x.id).length&&!S.contacts.some(c=>c.kind===kind&&c.schoolId===x.id));
+        const st=stateOf(kind,s);const opts=spare.filter(x=>!st||stateOf(kind,x)===st||!stateOf(kind,x));
+        rows.push(`<tr><td><b>${esc(s.name)}</b><div class="muted">${esc(kind==='dental'?s.loc:s.state)}</div></td><td><select name="m_${kind}_${s.id}"><option value="">Leave unmatched</option>${opts.map(x=>`<option value="${x.id}">${esc(x.dashName)}</option>`).join('')}</select></td></tr>`)}));
+      modal(`<form data-form="dash-review"><h2>Match schools to the dashboard</h2><p class="muted">These Playbook schools have no exact match in the dashboard. Pick the dashboard school each one should report under. The duplicate the link added for it is merged away.</p><div class="tw"><table><thead><tr><th>Playbook school</th><th>Dashboard school</th></tr></thead><tbody>${rows.join('')}</tbody></table></div><div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Save matches</button></div></form>`);break}
+    case 'dash-export':{const rows=dashRows();const d=JSON.parse(JSON.stringify(DASH));d.events=d.events.filter(r=>!r.pbId);rows.forEach(r=>{const {_mapped,...x}=r;d.events.push(x)});
+      const un=rows.filter(r=>!r._mapped).length;
+      dataModal('Updated dashboard file','campus-recruiting-data.json',JSON.stringify(d,null,1),'application/json',`${rows.length} held or invoiced event${rows.length===1?'':'s'} from the Playbook are included${un?`, ${un} of them at schools not matched to a dashboard name yet (they will show as Unmapped)`:''}. In the dashboard, open Data and choose Import data (JSON). Exporting again later replaces these rows rather than duplicating them.`);break}
+    case 'dash-csv':{const rows=dashRows();dataModal('Events in dashboard format','playbook-events-for-dashboard.csv',toCSV([['Event date','School','Event type','Format','Cost ($)','Attendees','Leads captured','Applications attributed','Hires attributed','Event name / notes','Year (if no date)','Season'],...rows.map(r=>[r.date,r.school,r.type,r.format,r.cost,r.attendees,r.leads,r.apps,r.hires,r.notes,r.year,r.season])]),'text/csv','Same columns as the dashboard\u2019s Events table. Only held or invoiced events are included.');break}
+    case 'dl-buf':downloadBuf();break;
+    case 'copy-buf':copyBuf();break;
+    case 'restore-open':modal(`<form data-form="restore"><h2>Restore from backup</h2><p class="muted">This replaces everything in the playbook with the contents of the backup.</p><input type="file" accept=".json,application/json" id="jsonfile" style="margin-bottom:8px"><textarea name="json" id="jsontext" style="min-height:160px" placeholder="Paste backup JSON here"></textarea><div class="formfoot" style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn" data-act="close">Cancel</button><button class="btn primary" type="submit">Restore</button></div></form>`);break;
+    case 'reset-ask':confirmModal('Reset the playbook to the starting school list? Events, contacts, transfers, resources, and archives will be erased. This cannot be undone.','reset','x','Reset playbook');break;
+    case 'reset':S=seed();applyRoster(S);persist();closeModal();render();toast('Playbook reset');break;
+  }
+});
+function setPath(o,p,v){const k=p.split('.');let t=o;for(let i=0;i<k.length-1;i++)t=t[k[i]];t[k[k.length-1]]=v;if(k[0]==='con'&&k[1]!=='limit')o.con.limit=48}
+document.addEventListener('input',e=>{const b=e.target.closest('[data-bind]');if(b){setPath(ui,b.dataset.bind,b.value);render()}});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  const es=t.closest('[data-evstatus]');if(es){commit(()=>{S.events.find(x=>x.id===es.dataset.evstatus).status=t.value});return}
+  const sf=t.closest('[data-sf]');
+  if(sf){const s=getSchool(sf.dataset.kind,sf.dataset.sid);if(!s)return;const f=sf.dataset.sf;let v=sf.value;
+    if(sf.dataset.num){v=v===''?null:Math.max(0,+v);if(['hires','target','budget'].includes(f)&&v===null)v=0}
+    s[f]=v;persist();render();if(ui.drawer&&document.querySelector('.modal')&&!document.querySelector('form[data-form]'))openDrawer();return}
+  if(t.name==='kind'&&t.form){const form=t.form;form.querySelectorAll('[data-kindseg] label').forEach(l=>l.classList.toggle('on',l.contains(t)));
+    const ss=form.querySelector('select[name=schoolId]');if(ss)ss.innerHTML=schoolOptsHtml(t.value,'');
+    const ev=form.querySelector('select[name=eventId]');if(ev)ev.innerHTML='<option value="">None</option>'+S.events.filter(x=>x.kind===t.value).sort(byDate).map(x=>`<option value="${x.id}">${esc(fmtDate(x.date)+' \u2013 '+x.name)}</option>`).join('');
+    if(form.dataset.form==='event-new')ui.sub.type=t.value;return}
+  if(t.name==='schoolId'&&t.form){const kind=(t.form.querySelector('input[name=kind]:checked')||t.form.querySelector('input[name=kind]')||{}).value;const s=kind&&getSchool(kind,t.value);const r=t.form.querySelector('select[name=recruiter]');if(s&&r&&s.recruiter)r.value=s.recruiter}
+  if(t.id==='csvfile'&&t.files[0]){const fr=new FileReader();fr.onload=()=>{$('#csvtext').value=fr.result};fr.readAsText(t.files[0])}
+  if(t.id==='jsonfile'&&t.files[0]){const fr=new FileReader();fr.onload=()=>{$('#jsontext').value=fr.result};fr.readAsText(t.files[0])}
+});
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();
+  const v=Object.fromEntries(new FormData(f).entries());const k=f.dataset.form;
+  const nz=x=>x===''||x==null?null:+x;
+  if(k==='event-new'||k==='event-edit'){
+    if(!v.schoolId||!v.recruiter)return toast('Choose a school and a recruiter.');
+    const base={kind:v.kind,schoolId:v.schoolId,name:v.name.trim(),recruiter:v.recruiter,date:v.date,type:v.type,format:v.format||'In-person',estCost:nz(v.estCost)||0,goal:nz(v.goal),notes:v.notes};
+    if(k==='event-new'){commit(()=>S.events.push({id:uid(),...base,status:'Planned',actualCost:null,attendees:null,leads:null,hd:null,wrap:''}));ui.sub={type:v.kind,date:''};toast('Event added');ui.ev=Object.assign(ui.ev,{});go('events')}
+    else{commit(()=>Object.assign(S.events.find(x=>x.id===v.id),base,{status:v.status,actualCost:nz(v.actualCost),attendees:nz(v.attendees),leads:nz(v.leads),hd:nz(v.hd),wrap:v.wrap}));closeModal();toast('Changes saved')}
+  }
+  else if(k==='contact'){
+    const rec={kind:v.kind,schoolId:v.schoolId,name:v.name.trim(),title:v.title,email:v.email,phone:v.phone,lastTouch:v.lastTouch,followUp:v.followUp,notes:v.notes};
+    commit(()=>{if(v.id)Object.assign(S.contacts.find(c=>c.id===v.id),rec);else S.contacts.push({id:uid(),...rec})});backFromForm();toast('Contact saved');
+  }
+  else if(k==='transfer'){
+    if(!v.schoolId||!v.recruiter)return toast('Choose a school and a recruiter.');
+    const rec={kind:v.kind,schoolId:v.schoolId,candidate:v.candidate.trim(),email:v.email,recruiter:v.recruiter,gradYear:v.gradYear,to:v.to,eventId:v.eventId,notes:v.notes};
+    commit(()=>{if(v.id)Object.assign(S.transfers.find(t=>t.id===v.id),rec);else S.transfers.push({id:uid(),...rec})});closeModal();toast('Transfer saved');
+  }
+  else if(k==='school'){
+    const list=v.kind==='dental'?S.dental:S.hygiene;
+    if(list.some(s=>s.name.toLowerCase()===v.name.trim().toLowerCase()))return toast('That school is already on the list.');
+    commit(()=>{const s=v.kind==='dental'?{id:'d'+uid(),name:v.name.trim(),loc:v.loc,recruiter:v.recruiter,target:+v.target||0,budget:+v.budget||0,hires:0,notes:''}:{id:'h'+uid(),name:v.name.trim(),state:v.state,recruiter:v.recruiter,classSize:nz(v.classSize),goal:nz(v.goal),support:v.support,hires:0,budget:0,notes:''};list.push(s);list.sort((a,b)=>a.name.localeCompare(b.name))});closeModal();toast('School added');
+  }
+  else if(k==='import-schools')importSchools(v.kind,v.csv||'');
+  else if(k==='team'){commit(()=>S.recruiters.forEach(r=>{r.name=(v['n_'+r.id]||r.name).trim();r.budget=+v['b_'+r.id]||0;r.target=+v['t_'+r.id]||0}));closeModal();toast('Budgets and targets saved')}
+  else if(k==='resource'){let u=v.url.trim();if(!/^https?:\/\//i.test(u))u='https://'+u;commit(()=>S.resources.push({id:uid(),title:v.title.trim(),url:u,cat:(v.cat||'').trim()||'General'}));toast('Resource added')}
+  else if(k==='archive'){
+    const t=totalsSnapshot(),names={};S.events.forEach(e=>names[e.kind+e.schoolId]=schoolName(e.kind,e.schoolId));
+    const hires=[...S.dental.map(s=>({kind:'dental',name:s.name,hires:s.hires})),...S.hygiene.map(s=>({kind:'hygiene',name:s.name,hires:s.hires}))].filter(h=>h.hires>0);
+    commit(()=>{S.archives.unshift({id:uid(),label:v.label.trim(),date:today(),t,events:S.events.slice(),transfers:S.transfers.slice(),hires,names});S.events=[];S.transfers=[];S.dental.forEach(s=>s.hires=0);S.hygiene.forEach(s=>s.hires=0)});closeModal();toast('Archived. Fresh start.');
+  }
+  else if(k==='dash-review'){let n=0;commit(()=>{Object.entries(v).forEach(([key,val])=>{if(!val)return;const [,kind,sid]=key.match(/^m_(dental|hygiene)_(.+)$/);const s=getSchool(kind,sid),dup=getSchool(kind,val);if(!s||!dup)return;s.dashName=dup.dashName;S[kind]=S[kind].filter(x=>x!==dup);n++})});closeModal();toast(`Matched ${n} school${n===1?'':'s'}`)}
+  else if(k==='dash-link'){const fi=$('#dashfile');if(!fi||!fi.files[0])return toast('Choose the dashboard JSON file first.');const fr=new FileReader();fr.onload=()=>{try{const r=linkDashboard(JSON.parse(fr.result));closeModal();render();toast(`Linked. Matched ${r.matched} schools, added ${r.added}.`)}catch(x){toast('That file is not a dashboard export.')}};fr.readAsText(fi.files[0])}
+  else if(k==='restore'){try{const o=JSON.parse(v.json);if(!o||!o.dental||!o.hygiene||!o.recruiters)throw 0;S=o;persist();closeModal();render();toast('Backup restored')}catch(x){toast('That file is not a Campus Playbook backup.')}}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modal-root').firstChild)closeModal()});
+
+/* ---------- boot ---------- */
+(async function(){
+  S=await loadState();let upgraded=false;
+  if(!S){S=seed();applyRoster(S);upgraded=true}else if(!S.rosterV){applyRoster(S);upgraded=true}
+  DASH=await loadDash();
+  saveMsg=window.storage?'Saved for the whole team':(window.localStorage?'Saved on this device':'Not saved in this view. Use Data & backup.');
+  try{if(!window.storage&&window.localStorage)localStorage.setItem('_t','1')}catch(e){saveMsg='Changes last until this tab closes. Use Data & backup.'}
+  render();if(upgraded){persist();toast('Recruiters and contacts loaded for all 390 schools')}
+})();
+</script>
+</body>
+</html>
